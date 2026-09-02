@@ -1,0 +1,272 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-jakarta);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-coral: var(--coral);
+  --color-mint: var(--mint);
+  --color-sun: var(--sun);
+  --color-plum: var(--plum);
+  --color-butter: var(--butter);
+}
+
+:root {
+  --font-jakarta: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --radius: 1.125rem;
+  --background: #f4f2fa;
+  --foreground: #2d2640;
+  --card: #ffffff;
+  --card-foreground: #2d2640;
+  --primary: #6b5bc7;
+  --primary-foreground: #ffffff;
+  --secondary: #ebe7f8;
+  --secondary-foreground: #4a3f8c;
+  --muted: #e8e4f4;
+  --muted-foreground: #6b6580;
+  --accent: #fff6cc;
+  --accent-foreground: #5c4d00;
+  --destructive: #e85d5d;
+  --border: #ddd8ef;
+  --input: #ddd8ef;
+  --ring: #9d8fd4;
+  --plum: #5648a8;
+  --butter: #ffd93d;
+  --coral: #ff7b6b;
+  --mint: #4ecdc4;
+  --sun: #ffd93d;
+}
+
+.dark {
+  --background: #1e1830;
+  --foreground: #f0ecff;
+  --card: #2a2340;
+  --card-foreground: #f0ecff;
+  --primary: #9d8fd4;
+  --primary-foreground: #1e1830;
+  --secondary: #3d3560;
+  --secondary-foreground: #e8e0ff;
+  --muted: #352e50;
+  --muted-foreground: #a9a0c4;
+  --accent: #4a4020;
+  --accent-foreground: #ffe566;
+  --destructive: #f08080;
+  --border: #443c60;
+  --input: #443c60;
+  --ring: #b8aae8;
+  --plum: #7c6fd6;
+  --butter: #ffd93d;
+  --coral: #ff9585;
+  --mint: #6ee0d8;
+  --sun: #ffd93d;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: var(--font-jakarta);
+  }
+}
+
+.qm-mesh-bg {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(ellipse 70% 50% at 0% 0%, rgba(107, 91, 199, 0.12), transparent 55%),
+    radial-gradient(ellipse 60% 45% at 100% 5%, rgba(255, 217, 61, 0.1), transparent 50%);
+}
+
+.qm-panel-purple {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: 1.5rem;
+}
+
+.qm-card {
+  border-radius: 1.25rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 2px 8px rgba(45, 38, 64, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.qm-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(45, 38, 64, 0.08);
+}
+
+.qm-card-yellow {
+  border-radius: 1.25rem;
+  background: var(--butter);
+  color: var(--accent-foreground);
+  box-shadow: 0 4px 16px rgba(255, 217, 61, 0.35);
+}
+
+.qm-card-plum {
+  border-radius: 1.5rem;
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 8px 28px rgba(107, 91, 199, 0.35);
+}
+
+.qm-btn-fun {
+  background: var(--butter);
+  color: var(--foreground);
+  font-weight: 700;
+  box-shadow: 0 4px 0 #e8c030, 0 6px 16px rgba(255, 217, 61, 0.4);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.qm-btn-fun:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 #e8c030, 0 8px 20px rgba(255, 217, 61, 0.45);
+}
+
+.qm-btn-fun:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #e8c030;
+}
+
+.qm-sidebar-active {
+  background: var(--accent);
+  border: 2px solid var(--butter);
+  color: var(--accent-foreground);
+  font-weight: 700;
+}
+
+.qm-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  padding: 0.375rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  color: var(--muted-foreground);
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.qm-pill-active {
+  background: var(--butter);
+  border-color: var(--butter);
+  color: var(--foreground);
+  box-shadow: 0 2px 8px rgba(255, 217, 61, 0.4);
+}
+
+.qm-timer {
+  background: var(--butter);
+  border: 2px solid #e8c030;
+  color: var(--foreground);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 3px 10px rgba(255, 217, 61, 0.35);
+}
+
+.qm-timer-urgent {
+  background: #ffe0e0;
+  border-color: var(--destructive);
+  color: #b03030;
+  animation: qm-pulse 0.8s ease-in-out infinite;
+}
+
+.qm-option {
+  border-radius: 1rem;
+  border: 2px solid var(--border);
+  background: white;
+  transition: all 0.15s ease;
+}
+
+.qm-option:hover {
+  border-color: var(--primary);
+}
+
+.qm-option-selected {
+  border-color: var(--butter) !important;
+  background: var(--butter) !important;
+  color: var(--foreground) !important;
+  font-weight: 700;
+  box-shadow: 0 3px 12px rgba(255, 217, 61, 0.4);
+}
+
+.qm-progress {
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.qm-progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--butter);
+  transition: width 0.4s ease;
+}
+
+.qm-progress-track {
+  height: 0.625rem;
+  border-radius: 9999px;
+  background: var(--muted);
+  overflow: hidden;
+}
+
+.qm-progress-track-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--primary);
+  transition: width 0.4s ease;
+}
+
+.qm-hex-badge {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qm-avatar {
+  border-radius: 9999px;
+  border: 3px solid var(--butter);
+  background: var(--secondary);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+@keyframes qm-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+@keyframes qm-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.qm-float {
+  animation: qm-float 3s ease-in-out infinite;
+}
