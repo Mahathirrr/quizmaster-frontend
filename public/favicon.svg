@@ -1,5 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="16" fill="#6B5BC7"/>
-  <text x="32" y="42" text-anchor="middle" font-family="system-ui,sans-serif" font-size="28" font-weight="800" fill="white">Q</text>
-  <circle cx="50" cy="14" r="7" fill="#FFD93D"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="50%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#3730A3"/>
+    </linearGradient>
+    <linearGradient id="qGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F1F5F9"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <filter id="drop" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#1E1B4B" flood-opacity="0.35"/>
+    </filter>
+    <filter id="innerGlow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowDiff"/>
+      <feFlood flood-color="#FFFFFF" flood-opacity="0.25"/>
+      <feComposite in2="shadowDiff" operator="in"/>
+      <feComposite in2="SourceGraphic" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- App Icon Base -->
+  <rect x="32" y="32" width="448" height="448" rx="112" fill="url(#bgGrad)" filter="url(#drop)"/>
+  <rect x="32" y="32" width="448" height="448" rx="112" stroke="white" stroke-opacity="0.2" stroke-width="4"/>
+
+  <!-- Tactile Bevel Highlight on Top -->
+  <path d="M 144 34 L 368 34 Q 478 34 478 144 L 478 160 Q 478 42 368 42 L 144 42 Q 34 42 34 160 L 34 144 Q 34 34 144 34 Z" fill="white" fill-opacity="0.25"/>
+
+  <!-- Letter Q Geometry -->
+  <g filter="url(#drop)">
+    <!-- Outer Ring -->
+    <circle cx="240" cy="240" r="120" stroke="url(#qGrad)" stroke-width="44" fill="none"/>
+    <!-- Q Tail -->
+    <path d="M 310 310 L 375 375" stroke="url(#qGrad)" stroke-width="44" stroke-linecap="round"/>
+  </g>
+
+  <!-- Golden Crown / Sparkle on Top-Right -->
+  <g filter="url(#drop)">
+    <circle cx="390" cy="120" r="46" fill="url(#goldGrad)" stroke="#FFFFFF" stroke-width="6"/>
+    <!-- Sparkle inside star circle -->
+    <path d="M 390 94 L 395 113 L 414 120 L 395 127 L 390 146 L 385 127 L 366 120 L 385 113 Z" fill="white"/>
+  </g>
 </svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" fill="none">
+      <defs>
+        <!-- Fine Dot Grid Pattern -->
+        <pattern id="dotGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <circle cx="20" cy="20" r="1.2" fill="#6366F1" fill-opacity="0.14"/>
+        </pattern>
+        <!-- Large Gradient Blobs -->
+        <radialGradient id="blob1" cx="20%" cy="15%" r="45%">
+          <stop offset="0%" stop-color="#818CF8" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#818CF8" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="blob2" cx="85%" cy="25%" r="40%">
+          <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.16"/>
+          <stop offset="100%" stop-color="#FBBF24" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="blob3" cx="50%" cy="80%" r="50%">
+          <stop offset="0%" stop-color="#34D399" stop-opacity="0.12"/>
+          <stop offset="100%" stop-color="#34D399" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Background Blobs -->
+      <rect width="100%" height="100%" fill="url(#blob1)"/>
+      <rect width="100%" height="100%" fill="url(#blob2)"/>
+      <rect width="100%" height="100%" fill="url(#blob3)"/>
+
+      <!-- Dot Grid Overlay -->
+      <rect width="100%" height="100%" fill="url(#dotGrid)"/>
+
+      <!-- Subtle Floating Mathematical & Edtech Glyphs -->
+      <g stroke="#4F46E5" stroke-opacity="0.12" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Plus Sign -->
+        <path d="M 120 180 L 140 180 M 130 170 L 130 190"/>
+        <path d="M 1040 380 L 1060 380 M 1050 370 L 1050 390"/>
+        <!-- Multiplication X -->
+        <path d="M 280 80 L 296 96 M 296 80 L 280 96"/>
+        <path d="M 880 140 L 896 156 M 896 140 L 880 156"/>
+        <!-- Division -->
+        <circle cx="680" cy="90" r="2.5" fill="#4F46E5" fill-opacity="0.12"/>
+        <line x1="670" y1="100" x2="690" y2="100"/>
+        <circle cx="680" cy="110" r="2.5" fill="#4F46E5" fill-opacity="0.12"/>
+        <!-- Square Root Radical -->
+        <path d="M 450 140 L 460 140 L 468 156 L 476 124 L 500 124"/>
+        <path d="M 980 540 L 990 540 L 998 556 L 1006 524 L 1030 524"/>
+        <!-- Delta Triangle -->
+        <polygon points="180,340 200,310 220,340"/>
+        <polygon points="820,440 836,416 852,440"/>
+        <!-- Geometric Circle Target -->
+        <circle cx="1060" cy="180" r="24" stroke-dasharray="4 4"/>
+        <circle cx="160" cy="520" r="20" stroke-dasharray="4 4"/>
+        <!-- Sigma Summation -->
+        <path d="M 360 480 L 384 480 L 372 496 L 384 512 L 360 512"/>
+      </g>
+
+      <!-- Faint Graduation Cap Outline -->
+      <g stroke="#F59E0B" stroke-opacity="0.15" stroke-width="2.5" fill="none" stroke-linecap="round">
+        <polygon points="560,60 520,78 560,96 600,78"/>
+        <path d="M 535 85 L 535 110 Q 560 122 585 110 L 585 85"/>
+      </g>
+    </svg>

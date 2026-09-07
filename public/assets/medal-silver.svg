@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <defs>
+        <linearGradient id="silver" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#F1F5F9"/>
+          <stop offset="50%" stop-color="#CBD5E1"/>
+          <stop offset="100%" stop-color="#64748B"/>
+        </linearGradient>
+        <linearGradient id="ribbon" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#3B82F6"/>
+          <stop offset="100%" stop-color="#1D4ED8"/>
+        </linearGradient>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#0F172A" flood-opacity="0.3"/>
+        </filter>
+      </defs>
+      <polygon points="170,40 256,180 200,260 114,120" fill="url(#ribbon)"/>
+      <polygon points="342,40 256,180 312,260 398,120" fill="#2563EB"/>
+      <g filter="url(#shadow)">
+        <circle cx="256" cy="310" r="140" fill="url(#silver)"/>
+        <circle cx="256" cy="310" r="120" stroke="#FFFFFF" stroke-width="8" fill="none"/>
+        <text x="256" y="360" font-family="system-ui,sans-serif" font-size="140" font-weight="900" text-anchor="middle" fill="#FFFFFF">2</text>
+      </g>
+    </svg>

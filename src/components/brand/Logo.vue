@@ -14,28 +14,26 @@ withDefaults(
   <RouterLink to="/" class="group inline-flex items-center gap-2.5 select-none">
     <div
       :class="[
-        'relative flex items-center justify-center rounded-2xl bg-gradient-to-tr from-primary to-indigo-500 shadow-md shadow-primary/25 border-b-2 border-primary/40 transition-transform duration-200 group-hover:scale-105',
-        size === 'sm' ? 'size-9' : size === 'lg' ? 'size-12' : 'size-10',
+        'relative shrink-0 flex items-center justify-center transition-transform duration-200 group-hover:scale-105',
+        size === 'sm' ? 'size-8' : size === 'lg' ? 'size-11' : 'size-9',
       ]"
     >
-      <span
-        :class="[
-          'font-black text-white tracking-tighter',
-          size === 'sm' ? 'text-base' : size === 'lg' ? 'text-2xl' : 'text-lg',
-        ]"
-      >Q</span>
-      <span class="absolute -right-1 -top-1 flex size-3 items-center justify-center rounded-full bg-amber-400 border-2 border-white shadow-sm ring-1 ring-amber-500/20" />
+      <img
+        src="/favicon.svg"
+        alt="QuizMaster Logo"
+        class="size-full object-contain drop-shadow-xs"
+      />
     </div>
     <div v-if="showText !== false" class="leading-none">
       <div class="flex items-center gap-1.5">
         <span
           :class="[
-            'block font-extrabold tracking-tight text-foreground',
+            'block font-black tracking-tight text-foreground',
             size === 'lg' ? 'text-2xl' : size === 'sm' ? 'text-base' : 'text-lg',
           ]"
         >Quiz<span class="text-primary">Master</span></span>
       </div>
-      <span v-if="size === 'lg'" class="mt-1 block text-[11px] font-semibold text-muted-foreground">Platform Kuis & Ujian Pintar</span>
+      <span v-if="size === 'lg'" class="mt-1 block text-[11px] font-semibold text-muted-foreground">Platform Kuis & Ujian Digital</span>
     </div>
   </RouterLink>
 </template>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <defs>
+        <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FEF08A"/>
+          <stop offset="50%" stop-color="#F59E0B"/>
+          <stop offset="100%" stop-color="#B45309"/>
+        </linearGradient>
+        <linearGradient id="ribbon" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#6366F1"/>
+          <stop offset="100%" stop-color="#4338CA"/>
+        </linearGradient>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#1E1B4B" flood-opacity="0.3"/>
+        </filter>
+      </defs>
+      <!-- Ribbon -->
+      <polygon points="170,40 256,180 200,260 114,120" fill="url(#ribbon)"/>
+      <polygon points="342,40 256,180 312,260 398,120" fill="#4F46E5"/>
+      <!-- Medal Coin -->
+      <g filter="url(#shadow)">
+        <circle cx="256" cy="310" r="140" fill="url(#gold)"/>
+        <circle cx="256" cy="310" r="120" stroke="#FFFBEB" stroke-width="8" fill="none"/>
+        <!-- Number 1 with Star -->
+        <text x="256" y="360" font-family="system-ui,sans-serif" font-size="140" font-weight="900" text-anchor="middle" fill="#FFFFFF">1</text>
+        <!-- Crown above 1 -->
+        <path d="M 216 210 L 230 226 L 256 200 L 282 226 L 296 210 L 290 236 L 222 236 Z" fill="#FFFBEB"/>
+      </g>
+    </svg>

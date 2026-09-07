@@ -14,6 +14,10 @@ import {
   Target,
   Brain,
   HelpCircle,
+  Clock,
+  Award,
+  CircleDot,
+  Check,
 } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 
@@ -26,11 +30,32 @@ const activeCategory = ref('Semua')
 
 const categories = ['Semua', 'Matematika', 'Sains', 'Bahasa', 'Sejarah', 'Teknologi']
 
+// 4 Cohesive Stats using 100% 3D generated assets
 const stats = [
-  { label: 'Siswa aktif', value: '1.200+', icon: Users, tone: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-950/50 dark:text-indigo-400' },
-  { label: 'Ujian dibuat', value: '350+', icon: BookOpen, tone: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/50 dark:text-emerald-400' },
-  { label: 'Soal tersimpan', value: '8.000+', asset: '/assets/badge-brain.png', tone: 'text-amber-600 bg-amber-50 dark:bg-amber-950/50 dark:text-amber-400' },
-  { label: 'Rata-rata skor', value: '78%', icon: ShieldCheck, tone: 'text-rose-600 bg-rose-50 dark:bg-rose-950/50 dark:text-rose-400' },
+  {
+    label: 'Siswa aktif terdaftar',
+    value: '1.200+',
+    trend: '+18% bulan ini',
+    asset: '/assets/stat-students.png',
+  },
+  {
+    label: 'Ujian siap dikerjakan',
+    value: '350+',
+    trend: 'Terus bertambah',
+    asset: '/assets/stat-exams.png',
+  },
+  {
+    label: 'Bank soal interaktif',
+    value: '8.000+',
+    trend: '5 Kategori inti',
+    asset: '/assets/badge-brain.png',
+  },
+  {
+    label: 'Rata-rata skor lulus',
+    value: '78%',
+    trend: 'Akurasi terverifikasi',
+    asset: '/assets/stat-score.png',
+  },
 ]
 
 const sampleQuizzes = [
@@ -99,17 +124,17 @@ const features = [
   {
     asset: '/assets/badge-timer.png',
     title: 'Live Countdown & Auto-Submit',
-    description: 'Timer real-time presisi per detik. Saat waktu habis, ujian terkirim otomatis demi transparansi & keadilan penuh.',
+    description: 'Timer real-time presisi per detik dengan sinkronisasi server. Waktu habis otomatis mengunci dan mengirim jawaban.',
   },
   {
     asset: '/assets/badge-brain.png',
     title: 'Skor Instan & Pembahasan',
-    description: 'Siswa langsung menerima hasil beserta review komprehensif jawaban benar dan salah untuk percepatan belajar.',
+    description: 'Siswa langsung menerima hasil beserta review komprehensif jawaban benar dan salah untuk evaluasi belajar cepat.',
   },
   {
     asset: '/assets/badge-trophy.png',
     title: 'Leaderboard & Kompetisi Sehat',
-    description: 'Klasemen dinamis siswa teratas memacu motivasi berprestasi dengan pembagian medali emas, perak, dan perunggu.',
+    description: 'Klasemen dinamis siswa teratas memacu motivasi berprestasi dengan podium juara emas, perak, dan perunggu.',
   },
   {
     asset: '/assets/badge-streak.png',
@@ -118,7 +143,7 @@ const features = [
   },
   {
     asset: '/assets/badge-target.png',
-    title: 'Target Skor & Akurasi Bank Soal',
+    title: 'Target Skor & Passing Grade',
     description: 'Atur passing score per kategori ujian, acak urutan soal, dan pantau metrik kelulusan siswa secara akurat.',
   },
   {
@@ -135,7 +160,6 @@ const badgeShowcase = [
     asset: '/assets/badge-trophy.png',
     criteria: 'Raih peringkat 1 di kuis mingguan',
     xp: '+250 XP',
-    unlocked: true,
   },
   {
     name: '7-Day Streak',
@@ -143,7 +167,6 @@ const badgeShowcase = [
     asset: '/assets/badge-streak.png',
     criteria: 'Ikut ujian berturut-turut 7 hari',
     xp: '+150 XP',
-    unlocked: true,
   },
   {
     name: 'Speed Runner',
@@ -151,7 +174,6 @@ const badgeShowcase = [
     asset: '/assets/badge-timer.png',
     criteria: 'Selesaikan kuis di bawah 10 menit',
     xp: '+120 XP',
-    unlocked: true,
   },
   {
     name: 'Brain Master',
@@ -159,7 +181,6 @@ const badgeShowcase = [
     asset: '/assets/badge-brain.png',
     criteria: 'Skor 100% tanpa salah pada 20 soal',
     xp: '+300 XP',
-    unlocked: true,
   },
   {
     name: 'Bullseye Sniper',
@@ -167,11 +188,10 @@ const badgeShowcase = [
     asset: '/assets/badge-target.png',
     criteria: 'Akurasi di atas 90% dalam 5 ujian',
     xp: '+200 XP',
-    unlocked: true,
   },
 ]
 
-// Interactive Quiz Preview in Hero
+// Realistic Interactive Quiz Preview inside App Window Mockup
 const selectedHeroOption = ref<number>(0)
 const heroAnswerSubmitted = ref(false)
 
@@ -209,17 +229,22 @@ if (typeof window !== 'undefined') {
 
 <template>
   <div class="min-h-screen qm-mesh-bg text-foreground selection:bg-primary/20">
-    <!-- Navigation Header -->
-    <header
-      :class="[
-        'sticky top-0 z-50 transition-all duration-300',
-        navScrolled
-          ? 'border-b border-border/80 bg-background/85 backdrop-blur-md shadow-sm'
-          : 'bg-transparent',
-      ]"
-    >
-      <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Logo size="md" />
+    <!-- Floating Frosted Glass Header / Navbar -->
+    <header class="sticky top-0 z-50 px-4 pt-3 sm:px-6">
+      <div
+        :class="[
+          'mx-auto flex h-16 max-w-6xl items-center justify-between rounded-2xl px-5 transition-all duration-300',
+          navScrolled
+            ? 'border border-border/90 bg-background/90 shadow-md backdrop-blur-xl'
+            : 'border border-border/50 bg-background/75 shadow-xs backdrop-blur-md',
+        ]"
+      >
+        <div class="flex items-center gap-3">
+          <Logo size="md" />
+          <span class="hidden rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-primary sm:inline-block border border-primary/20">
+            v2.0
+          </span>
+        </div>
 
         <nav class="hidden items-center gap-7 text-sm font-bold text-muted-foreground md:flex">
           <a href="#fitur" class="transition-colors hover:text-primary">Fitur</a>
@@ -239,7 +264,7 @@ if (typeof window !== 'undefined') {
             <button
               class="qm-btn-fun inline-flex items-center gap-1.5 px-4 py-2 text-xs uppercase tracking-wider"
             >
-              Daftar Gratis <ArrowRight class="size-3.5" />
+              Mulai Gratis <ArrowRight class="size-3.5" />
             </button>
           </RouterLink>
         </div>
@@ -247,31 +272,31 @@ if (typeof window !== 'undefined') {
     </header>
 
     <!-- Hero Section -->
-    <section class="relative overflow-hidden px-4 pb-16 pt-8 sm:px-6 sm:pt-12 md:pb-24">
+    <section class="relative px-4 pb-16 pt-10 sm:px-6 sm:pt-14 md:pb-24">
       <div class="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-12">
-        <!-- Hero Text & Mascot Intro -->
-        <div class="lg:col-span-7">
-          <div class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary mb-5 shadow-xs">
-            <Sparkles class="size-3.5 text-amber-500 fill-amber-500 animate-spin" style="animation-duration: 4s;" />
-            <span>Platform Kuis Interaktif & Seru</span>
+        <!-- Hero Left Column -->
+        <div class="lg:col-span-6">
+          <div class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary mb-5 shadow-2xs">
+            <span class="flex size-2 rounded-full bg-primary" />
+            <span>Platform Kuis & Ujian Digital Indonesia</span>
           </div>
 
-          <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-5xl leading-[1.18]">
+          <h1 class="text-4xl font-black tracking-tight sm:text-5xl lg:text-5xl leading-[1.15]">
             Belajar & Ujian Jadi <br />
             <span class="text-primary underline decoration-amber-400 decoration-wavy decoration-2 underline-offset-8">
-              Lebih Nagih
-            </span>, Bukan Membosankan! 🚀
+              Lebih Seru
+            </span>, Bukan Membosankan! 🎯
           </h1>
 
           <p class="mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-muted-foreground">
-            QuizMaster mengubah sesi kuis membosankan menjadi petualangan belajar yang penuh tantangan. Raih skor tertinggi, koleksi badge 3D keren, dan buktikan kemampuanmu di podium juara!
+            QuizMaster menghadirkan pengalaman evaluasi belajar modern dengan live countdown timer, skor otomatis, leaderboard kompetitif, dan koleksi 3D badge prestasi yang bikin siswa makin termotivasi.
           </p>
 
           <!-- CTAs -->
           <div class="mt-8 flex flex-wrap items-center gap-4">
             <RouterLink to="/register">
               <button class="qm-btn-fun inline-flex items-center gap-2 px-6 py-3.5 text-base">
-                Mulai Ujian Sekarang <ArrowRight class="size-4" />
+                Mulai Ujian Gratis <ArrowRight class="size-4" />
               </button>
             </RouterLink>
             <a href="#kuis">
@@ -281,150 +306,149 @@ if (typeof window !== 'undefined') {
             </a>
           </div>
 
-          <!-- Mascot Speech Bubble Card -->
+          <!-- Calm Mascot Speech Bubble Card (No wobble) -->
           <div class="mt-8 flex items-center gap-4 rounded-2xl border border-border/80 bg-card/90 p-4 shadow-sm backdrop-blur-xs max-w-lg">
             <div class="relative shrink-0">
               <img
                 src="/assets/mascot.png"
                 alt="QuizMaster Mascot Hootie"
-                class="size-16 object-contain drop-shadow-md qm-bounce"
+                class="size-15 object-contain drop-shadow-xs"
               />
-              <span class="absolute -bottom-1 -right-1 flex size-5 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-bold text-white shadow-xs">
+              <span class="absolute -bottom-1 -right-1 flex size-5 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-bold text-white shadow-2xs">
                 ✓
               </span>
             </div>
             <div class="min-w-0 flex-1">
               <div class="flex items-center gap-2">
-                <span class="font-extrabold text-xs uppercase tracking-wide text-primary">Hootie the Scholar</span>
-                <span class="rounded-full bg-amber-100 dark:bg-amber-950 px-2 py-0.5 text-[10px] font-extrabold text-amber-700 dark:text-amber-300">Maskot Resmi</span>
+                <span class="font-black text-xs uppercase tracking-wide text-primary">Hootie the Scholar</span>
+                <span class="rounded-full bg-amber-100 dark:bg-amber-950 px-2 py-0.5 text-[10px] font-black text-amber-700 dark:text-amber-300">Maskot Resmi</span>
               </div>
               <p class="text-xs sm:text-sm text-muted-foreground mt-0.5 font-medium">
-                "Psst, rajin ikut kuis 15 menit sehari bikin streak kamu nyala terus dan XP melesat! Siap jadi juara?"
+                "Halo! Aku Hootie. Selesaikan 1 kuis tiap hari buat naikin ranking dan pertahankan streak belajarmu!"
               </p>
             </div>
           </div>
         </div>
 
-        <!-- Hero Gamified Live Quiz Card Preview -->
-        <div class="relative lg:col-span-5">
-          <!-- Floating Streak Badge (Bottom Left) -->
-          <div class="absolute -left-6 -bottom-5 z-20 hidden sm:flex items-center gap-2.5 rounded-2xl border border-amber-300/80 bg-card/95 p-3 shadow-lg backdrop-blur-md qm-float">
-            <img src="/assets/badge-streak.png" alt="Streak" class="size-11 object-contain drop-shadow-xs" />
-            <div>
-              <p class="text-[10px] font-extrabold uppercase text-amber-600 dark:text-amber-400">Daily Streak</p>
-              <p class="text-sm font-black">6 Hari Berturut 🔥</p>
-            </div>
-          </div>
-
-          <!-- Floating Trophy Badge (Top Right) -->
-          <div class="absolute -right-4 -top-6 z-20 flex items-center gap-2 rounded-2xl border border-primary/20 bg-card/95 p-2.5 shadow-lg backdrop-blur-md">
-            <img src="/assets/badge-trophy.png" alt="Trophy" class="size-11 object-contain drop-shadow-xs" />
-            <div class="pr-2">
-              <p class="text-[10px] font-extrabold text-muted-foreground">Peringkat Mingguan</p>
-              <p class="text-sm font-black text-primary">Rank #1 Nasional 🏆</p>
-            </div>
-          </div>
-
-          <!-- Main Purple Tactile Quiz Card -->
-          <div class="qm-card-plum relative z-10 p-6 sm:p-7 shadow-2xl">
-            <!-- Header bar -->
-            <div class="flex items-center justify-between border-b border-white/15 pb-4">
-              <div class="flex items-center gap-3">
-                <div class="flex size-10 items-center justify-center rounded-full bg-amber-400 font-black text-slate-900 shadow-inner">
-                  QM
-                </div>
-                <div>
-                  <div class="flex items-center gap-1.5">
-                    <span class="text-xs font-bold text-white/80">Kuis Matematika Ceria</span>
-                    <span class="rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-extrabold text-amber-300">Level 8</span>
-                  </div>
-                  <p class="text-sm font-extrabold text-white">Gold Tier · 1.240 XP</p>
-                </div>
+        <!-- Hero Right Column: High-Fidelity App Mockup Window (Zero AI Slop) -->
+        <div class="lg:col-span-6">
+          <div class="qm-mockup-frame overflow-hidden">
+            <!-- macOS Window Titlebar -->
+            <div class="flex items-center justify-between border-b border-border/80 bg-muted/40 px-4 py-3">
+              <div class="flex items-center gap-2">
+                <span class="size-3 rounded-full bg-rose-400" />
+                <span class="size-3 rounded-full bg-amber-400" />
+                <span class="size-3 rounded-full bg-emerald-400" />
               </div>
-              <div class="flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 font-mono text-xs font-black tracking-wider text-amber-300 border border-white/20">
-                <Timer class="size-3.5" /> 14:25
+              <div class="flex items-center gap-1.5 rounded-lg border border-border/60 bg-background/80 px-3 py-1 font-mono text-[11px] text-muted-foreground">
+                <span class="size-1.5 rounded-full bg-emerald-500" />
+                <span>app.quizmaster.id/live/sesi-matematika</span>
+              </div>
+              <div class="flex items-center gap-1 rounded-full bg-amber-100 dark:bg-amber-950/80 px-2.5 py-0.5 text-[11px] font-black text-amber-700 dark:text-amber-300">
+                <Clock class="size-3 mr-0.5" /> 14:25
               </div>
             </div>
 
-            <!-- Question progress -->
-            <div class="mt-4">
-              <div class="flex justify-between text-xs font-bold text-white/80 mb-1.5">
-                <span>Soal 03 dari 10</span>
-                <span class="text-amber-300 font-black">+50 XP</span>
-              </div>
-              <ProgressBar :value="3" :max="10" variant="purple" />
-            </div>
-
-            <!-- Question text -->
-            <div class="mt-5">
-              <p class="text-base sm:text-lg font-bold text-white leading-snug">
-                Rani memiliki 12 apel. Ia membagikan 4 apel ke temannya dan membeli lagi 8 apel. Berapa sisa apel Rani sekarang?
-              </p>
-            </div>
-
-            <!-- Options Interactive -->
-            <div class="mt-4 space-y-2.5">
-              <button
-                v-for="(opt, idx) in [
-                  { label: 'A', text: '16 apel (Jawaban Tepat)' },
-                  { label: 'B', text: '12 apel' },
-                  { label: 'C', text: '8 apel' },
-                  { label: 'D', text: '20 apel' }
-                ]"
-                :key="opt.label"
-                type="button"
-                @click="pickHeroOption(idx)"
-                :class="[
-                  'w-full flex items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold transition-all',
-                  selectedHeroOption === idx
-                    ? 'bg-amber-400 text-slate-950 font-black shadow-md translate-x-1'
-                    : 'bg-white/10 hover:bg-white/20 text-white border border-white/15'
-                ]"
-              >
+            <!-- Window Body: Real Exam Session UI -->
+            <div class="p-6 bg-card">
+              <!-- Student Profile & Exam Info Strip -->
+              <div class="flex items-center justify-between border-b border-border/60 pb-4 mb-4">
                 <div class="flex items-center gap-3">
-                  <span
-                    :class="[
-                      'flex size-6 items-center justify-center rounded-md text-xs font-black',
-                      selectedHeroOption === idx ? 'bg-slate-900 text-amber-400' : 'bg-white/20 text-white'
-                    ]"
-                  >
-                    {{ opt.label }}
-                  </span>
-                  <span>{{ opt.text }}</span>
+                  <div class="qm-avatar size-10 text-xs font-black">AR</div>
+                  <div>
+                    <div class="flex items-center gap-1.5">
+                      <p class="text-sm font-black">Aisha Rahma</p>
+                      <span class="rounded bg-primary/10 px-1.5 py-0.2 text-[10px] font-black text-primary">Gold Tier</span>
+                    </div>
+                    <p class="text-xs text-muted-foreground font-semibold">1.240 XP · Matematika Dasar</p>
+                  </div>
                 </div>
-                <CheckCircle2 v-if="selectedHeroOption === idx" class="size-4 text-slate-950" />
-              </button>
-            </div>
-
-            <!-- Feedback hint & Action -->
-            <div class="mt-5 flex items-center justify-between border-t border-white/15 pt-3">
-              <div class="flex items-center gap-2 text-xs font-bold text-emerald-300">
-                <span class="inline-block size-2 rounded-full bg-emerald-400 animate-ping" />
-                <span>{{ heroAnswerSubmitted ? 'Pilihan tersimpan! +50 XP 🚀' : 'Klik opsi untuk mencoba simulasi' }}</span>
+                <div class="text-right">
+                  <p class="text-xs font-black text-primary">Soal 03 / 10</p>
+                  <p class="text-[11px] font-bold text-muted-foreground">30% Selesai</p>
+                </div>
               </div>
-              <img src="/assets/badge-brain.png" alt="Brain" class="size-8 object-contain" />
+
+              <!-- Question Progress -->
+              <div class="mb-5">
+                <ProgressBar :value="3" :max="10" />
+              </div>
+
+              <!-- Question Content -->
+              <div class="mb-5">
+                <p class="text-xs font-black uppercase tracking-wider text-muted-foreground mb-1">Pertanyaan 3</p>
+                <h3 class="text-base sm:text-lg font-bold leading-snug">
+                  Rani memiliki 12 apel. Ia membagikan 4 apel ke temannya dan membeli lagi 8 apel di pasar. Berapa total sisa apel Rani sekarang?
+                </h3>
+              </div>
+
+              <!-- Interactive Option Buttons -->
+              <div class="space-y-2.5">
+                <button
+                  v-for="(opt, idx) in [
+                    { label: 'A', text: '16 apel', correct: true },
+                    { label: 'B', text: '12 apel', correct: false },
+                    { label: 'C', text: '8 apel', correct: false },
+                    { label: 'D', text: '20 apel', correct: false }
+                  ]"
+                  :key="opt.label"
+                  type="button"
+                  @click="pickHeroOption(idx)"
+                  :class="[
+                    'w-full flex items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold border transition-all duration-150',
+                    selectedHeroOption === idx
+                      ? 'border-primary bg-primary/10 text-primary ring-2 ring-primary/20 shadow-xs'
+                      : 'border-border/80 bg-card hover:bg-secondary/60 text-foreground'
+                  ]"
+                >
+                  <div class="flex items-center gap-3">
+                    <span
+                      :class="[
+                        'flex size-6 items-center justify-center rounded-lg text-xs font-black',
+                        selectedHeroOption === idx ? 'bg-primary text-white' : 'bg-muted text-foreground'
+                      ]"
+                    >
+                      {{ opt.label }}
+                    </span>
+                    <span>{{ opt.text }}</span>
+                  </div>
+                  <Check v-if="selectedHeroOption === idx" class="size-4 text-primary stroke-[3]" />
+                </button>
+              </div>
+
+              <!-- Mockup Footer Notice -->
+              <div class="mt-5 flex items-center justify-between border-t border-border/60 pt-3 text-xs">
+                <span class="text-muted-foreground font-semibold flex items-center gap-1.5">
+                  <CircleDot class="size-3 text-emerald-500" />
+                  {{ heroAnswerSubmitted ? 'Jawaban tersimpan otomatis di server' : 'Klik opsi untuk mencoba simulasi' }}
+                </span>
+                <span class="font-black text-amber-600 dark:text-amber-400">+50 XP Tersedia</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Quick Stats Strip -->
+      <!-- 4 Cohesive Stat Cards (Fixes the Mismatched Squircles) -->
       <div class="mx-auto mt-14 max-w-6xl">
-        <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div
             v-for="s in stats"
             :key="s.label"
-            class="qm-card flex items-center gap-3.5 p-4 transition-all"
+            class="qm-card flex items-center gap-4 p-5 transition-all duration-200 hover:border-primary/40"
           >
-            <div v-if="s.asset" class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-amber-50 dark:bg-amber-950/40">
-              <img :src="s.asset" :alt="s.label" class="size-9 object-contain" />
-            </div>
-            <div v-else :class="['flex size-12 shrink-0 items-center justify-center rounded-2xl', s.tone]">
-              <component :is="s.icon" class="size-6" />
-            </div>
-            <div>
-              <p class="text-xl font-extrabold tracking-tight text-foreground">{{ s.value }}</p>
-              <p class="text-xs font-bold text-muted-foreground">{{ s.label }}</p>
+            <!-- 3D Generated Asset Icon (Clear, no ugly brown boxes) -->
+            <img
+              :src="s.asset"
+              :alt="s.label"
+              class="size-14 shrink-0 object-contain drop-shadow-sm"
+            />
+            <div class="min-w-0">
+              <p class="text-2xl font-black tracking-tight text-foreground">{{ s.value }}</p>
+              <p class="text-xs font-bold text-muted-foreground mt-0.5">{{ s.label }}</p>
+              <span class="inline-block mt-1 text-[10px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                {{ s.trend }}
+              </span>
             </div>
           </div>
         </div>
@@ -489,7 +513,7 @@ if (typeof window !== 'undefined') {
                 <img
                   :src="quiz.asset"
                   :alt="quiz.title"
-                  class="size-12 shrink-0 object-contain drop-shadow-xs transition-transform duration-200 group-hover:scale-110"
+                  class="size-12 shrink-0 object-contain drop-shadow-xs"
                 />
                 <div>
                   <h3 class="font-extrabold text-base leading-snug group-hover:text-primary transition-colors">
@@ -573,7 +597,7 @@ if (typeof window !== 'undefined') {
             :key="b.name"
             class="qm-card flex flex-col items-center p-5 text-center transition-all group"
           >
-            <div class="relative mb-3 flex size-20 items-center justify-center rounded-2xl bg-secondary/70 group-hover:scale-110 transition-transform">
+            <div class="relative mb-3 flex size-20 items-center justify-center rounded-2xl bg-secondary/70">
               <img :src="b.asset" :alt="b.name" class="size-16 object-contain drop-shadow-md" />
             </div>
             <span class="rounded-full bg-amber-100 dark:bg-amber-950 px-2 py-0.5 text-[10px] font-black text-amber-700 dark:text-amber-300">
@@ -635,7 +659,7 @@ if (typeof window !== 'undefined') {
             <p class="font-extrabold text-sm sm:text-base text-center truncate w-full text-primary">Aisha Rahma</p>
             <p class="text-xs font-black text-amber-600 dark:text-amber-400">1.240 XP</p>
             <div class="mt-3 w-full rounded-t-2xl border-2 border-amber-400 bg-gradient-to-b from-amber-200/50 to-amber-100/30 dark:from-amber-950/60 dark:to-amber-900/30 p-4 text-center h-36 sm:h-40 flex flex-col justify-center items-center shadow-md">
-              <span class="text-3xl sm:text-4xl animate-bounce" style="animation-duration: 2s;">🥇</span>
+              <span class="text-3xl sm:text-4xl">🥇</span>
               <span class="text-xs sm:text-sm font-black text-amber-800 dark:text-amber-200 mt-1">98% Skor Rata-rata</span>
             </div>
           </div>
@@ -718,21 +742,13 @@ if (typeof window !== 'undefined') {
 
     <!-- Final Call To Action -->
     <section class="px-4 py-16 sm:px-6 md:py-20">
-      <div class="qm-card-plum relative mx-auto max-w-4xl overflow-hidden p-8 sm:p-12 text-center shadow-2xl">
-        <!-- Mascot Peek -->
+      <div class="qm-card-plum relative mx-auto max-w-4xl overflow-hidden p-8 sm:p-12 text-center shadow-xl">
         <div class="mx-auto mb-4 flex justify-center">
-          <div class="relative">
-            <img
-              src="/assets/mascot.png"
-              alt="Mascot Hootie"
-              class="size-24 object-contain drop-shadow-xl qm-bounce"
-            />
-            <img
-              src="/assets/badge-trophy.png"
-              alt="Trophy"
-              class="absolute -right-3 -top-2 size-10 object-contain drop-shadow-md"
-            />
-          </div>
+          <img
+            src="/assets/mascot.png"
+            alt="Mascot Hootie"
+            class="size-20 object-contain drop-shadow-md"
+          />
         </div>
 
         <h2 class="text-2xl font-black sm:text-4xl tracking-tight text-white leading-tight">
@@ -757,20 +773,70 @@ if (typeof window !== 'undefined') {
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="border-t border-border/80 px-4 py-12 text-center">
-      <Logo size="sm" class="mx-auto mb-4 justify-center" />
-      <div class="flex flex-wrap justify-center gap-6 text-sm font-bold text-muted-foreground mb-4">
-        <a href="#fitur" class="hover:text-primary transition-colors">Fitur</a>
-        <a href="#kuis" class="hover:text-primary transition-colors">Kuis Populer</a>
-        <a href="#badge" class="hover:text-primary transition-colors">Badge</a>
-        <a href="#leaderboard" class="hover:text-primary transition-colors">Leaderboard</a>
-        <a href="#faq" class="hover:text-primary transition-colors">FAQ</a>
-        <RouterLink to="/login" class="hover:text-primary transition-colors">Portal Masuk</RouterLink>
+    <!-- Professional Multi-Column SaaS EdTech Footer -->
+    <footer class="border-t border-border/80 bg-background/60 px-4 pt-16 pb-12 sm:px-6">
+      <div class="mx-auto max-w-6xl">
+        <div class="grid grid-cols-2 gap-8 md:grid-cols-5 lg:gap-10 pb-12 border-b border-border/60">
+          <!-- Col 1: Brand & Tagline -->
+          <div class="col-span-2 space-y-3">
+            <Logo size="md" />
+            <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-sm font-medium">
+              Platform kuis dan evaluasi belajar interaktif dengan timer server-side, skor instan, leaderboard kompetitif, dan koleksi 3D badge prestasi.
+            </p>
+            <div class="pt-2 flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+              <span class="size-2 rounded-full bg-emerald-500" />
+              <span>Semua Sistem Operasional (Uptime 99.8%)</span>
+            </div>
+          </div>
+
+          <!-- Col 2: Platform -->
+          <div class="space-y-3 text-xs sm:text-sm">
+            <p class="font-black text-foreground uppercase tracking-wider text-[11px]">Platform</p>
+            <ul class="space-y-2 text-muted-foreground font-semibold">
+              <li><a href="#fitur" class="hover:text-primary transition-colors">Fitur Ujian Online</a></li>
+              <li><a href="#fitur" class="hover:text-primary transition-colors">Timer & Auto-Submit</a></li>
+              <li><a href="#leaderboard" class="hover:text-primary transition-colors">Papan Peringkat</a></li>
+              <li><a href="#badge" class="hover:text-primary transition-colors">Sistem 3D Badge</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 3: Kategori Kuis -->
+          <div class="space-y-3 text-xs sm:text-sm">
+            <p class="font-black text-foreground uppercase tracking-wider text-[11px]">Kategori Soal</p>
+            <ul class="space-y-2 text-muted-foreground font-semibold">
+              <li><a href="#kuis" class="hover:text-primary transition-colors">Matematika & Aljabar</a></li>
+              <li><a href="#kuis" class="hover:text-primary transition-colors">Sains & Fisika</a></li>
+              <li><a href="#kuis" class="hover:text-primary transition-colors">Bahasa & Literasi</a></li>
+              <li><a href="#kuis" class="hover:text-primary transition-colors">Teknologi & Koding</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 4: Akses & Akun -->
+          <div class="space-y-3 text-xs sm:text-sm">
+            <p class="font-black text-foreground uppercase tracking-wider text-[11px]">Akses & Akun</p>
+            <ul class="space-y-2 text-muted-foreground font-semibold">
+              <li><RouterLink to="/login" class="hover:text-primary transition-colors">Masuk Portal Guru</RouterLink></li>
+              <li><RouterLink to="/login" class="hover:text-primary transition-colors">Masuk Portal Siswa</RouterLink></li>
+              <li><RouterLink to="/login" class="hover:text-primary transition-colors">Coba Akun Demo</RouterLink></li>
+              <li><RouterLink to="/register" class="hover:text-primary transition-colors">Registrasi Akun Baru</RouterLink></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Bottom Copyright Row -->
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-muted-foreground">
+          <p>
+            QuizMaster &copy; {{ new Date().getFullYear() }} · Hak Cipta Dilindungi Undang-Undang.
+          </p>
+          <div class="flex items-center gap-6">
+            <a href="#faq" class="hover:text-primary transition-colors">Bantuan FAQ</a>
+            <span class="text-border">·</span>
+            <span class="hover:text-primary transition-colors cursor-pointer">Privasi</span>
+            <span class="text-border">·</span>
+            <span class="hover:text-primary transition-colors cursor-pointer">Syarat & Ketentuan</span>
+          </div>
+        </div>
       </div>
-      <p class="text-xs text-muted-foreground font-semibold">
-        QuizMaster &copy; {{ new Date().getFullYear() }} — Platform kuis dan ujian online interaktif. Dibuat dengan penuh semangat untuk pendidikan Indonesia.
-      </p>
     </footer>
   </div>
 </template>
