@@ -59,33 +59,48 @@ onMounted(async () => {
 <template>
   <div class="space-y-6">
     <!-- User header -->
-    <div class="qm-card p-5">
+    <div class="qm-card p-6">
       <div class="flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-          <div class="qm-avatar size-14 text-lg">{{ auth.user?.name?.charAt(0) ?? '?' }}</div>
+        <div class="flex items-center gap-4">
+          <div class="relative shrink-0">
+            <div class="qm-avatar size-16 text-xl font-black shadow-sm">{{ auth.user?.name?.charAt(0) ?? '?' }}</div>
+            <img src="/assets/mascot.png" alt="Mascot" class="absolute -bottom-2 -right-2 size-8 object-contain drop-shadow-xs" />
+          </div>
           <div>
-            <h1 class="text-xl font-extrabold">Halo, {{ auth.user?.name }}! 👋</h1>
-            <p class="text-sm text-muted-foreground">Level <span class="font-bold text-primary">{{ level }}</span> · {{ xp }} XP</p>
+            <div class="flex items-center gap-2">
+              <h1 class="text-xl sm:text-2xl font-black">Halo, {{ auth.user?.name }}! 👋</h1>
+              <span class="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-black text-primary">Tier {{ level }}</span>
+            </div>
+            <p class="text-xs sm:text-sm font-semibold text-muted-foreground mt-0.5">
+              XP Terkumpul: <span class="font-extrabold text-foreground">{{ xp }} XP</span> · Terus tingkatkan skormu!
+            </p>
           </div>
         </div>
         <RouterLink to="/student/exams">
-          <Button variant="fun" class="rounded-2xl">
-            <GlassIcon name="rocket" tone="sun" :size="28" class="!drop-shadow-none" />
-            Lanjut Kuis
-          </Button>
+          <button class="qm-btn-fun inline-flex items-center gap-2 px-5 py-2.5 text-sm">
+            <img src="/assets/badge-target.png" alt="Quiz" class="size-5 object-contain" />
+            Mulai Kuis Baru
+          </button>
         </RouterLink>
       </div>
-      <ProgressBar :value="data?.average_score ?? 0" :max="100" label="Progress ke level berikutnya" class="mt-4" />
+      <ProgressBar :value="data?.average_score ?? 0" :max="100" label="Progress ke level berikutnya" class="mt-5" />
     </div>
 
     <!-- Streak banner -->
     <div class="qm-card-yellow flex flex-wrap items-center justify-between gap-4 p-5">
-      <div>
-        <p class="text-xs font-bold uppercase tracking-wide opacity-70">Streak kamu</p>
-        <p class="text-3xl font-extrabold">{{ streak }} hari 🔥</p>
-        <p class="text-sm font-semibold mt-1">Keep going! Jangan putus streak-nya.</p>
+      <div class="flex items-center gap-4">
+        <img src="/assets/badge-streak.png" alt="Streak Flame" class="size-16 object-contain drop-shadow-sm qm-bounce" />
+        <div>
+          <p class="text-xs font-black uppercase tracking-wider opacity-75">Daily Learning Streak</p>
+          <p class="text-2xl sm:text-3xl font-black">{{ streak }} Hari Berturut 🔥</p>
+          <p class="text-xs font-bold mt-0.5">Keren banget! Pertahankan konsistensimu belajar tiap hari.</p>
+        </div>
       </div>
-      <GlassIcon name="trophy" tone="sun" :size="56" />
+      <RouterLink to="/student/exams">
+        <Button variant="outline" size="sm" class="rounded-xl border-amber-400/50 bg-amber-500/10 font-bold hover:bg-amber-500/20">
+          Latih Kuis Hari Ini →
+        </Button>
+      </RouterLink>
     </div>
 
     <p v-if="error" class="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive">{{ error }}</p>

@@ -1,10 +1,22 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ArrowRight, Bell, ChevronRight } from 'lucide-vue-next'
+import { ref, computed } from 'vue'
+import {
+  ArrowRight,
+  ChevronRight,
+  Sparkles,
+  Users,
+  ShieldCheck,
+  CheckCircle2,
+  BookOpen,
+  Timer,
+  Trophy,
+  Flame,
+  Target,
+  Brain,
+  HelpCircle,
+} from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 
-import GlassIcon from '@/components/brand/GlassIcon.vue'
-import HexBadge from '@/components/brand/HexBadge.vue'
 import Logo from '@/components/brand/Logo.vue'
 import ProgressBar from '@/components/brand/ProgressBar.vue'
 import { Badge } from '@/components/ui/badge'
@@ -12,265 +24,753 @@ import { Button } from '@/components/ui/button'
 
 const activeCategory = ref('Semua')
 
-const categories = ['Semua', 'Matematika', 'IPA', 'Bahasa', 'Sejarah', 'Umum']
+const categories = ['Semua', 'Matematika', 'Sains', 'Bahasa', 'Sejarah', 'Teknologi']
 
 const stats = [
-  { label: 'Siswa aktif', value: '1.200+', icon: 'users' as const, tone: 'mint' as const },
-  { label: 'Ujian dibuat', value: '350+', icon: 'book' as const, tone: 'violet' as const },
-  { label: 'Soal di bank', value: '8.000+', icon: 'brain' as const, tone: 'sun' as const },
-  { label: 'Rata-rata skor', value: '78%', icon: 'chart' as const, tone: 'coral' as const },
-]
-
-const features = [
-  { icon: 'book' as const, tone: 'violet' as const, title: 'Kelola kategori & ujian', description: 'Admin buat kategori, atur durasi, pass score, dan publish — semua dari satu dashboard yang rapi.' },
-  { icon: 'timer' as const, tone: 'sun' as const, title: 'Timer & auto-submit', description: 'Countdown live di layar siswa. Waktu habis? Jawaban otomatis terkirim. Fair play guaranteed.' },
-  { icon: 'trophy' as const, tone: 'coral' as const, title: 'Skor, review & leaderboard', description: 'Hasil langsung keluar, bisa review jawaban benar/salah, plus ranking antar siswa biar kompetitif.' },
-  { icon: 'shield' as const, tone: 'mint' as const, title: 'Portal terpisah & aman', description: 'Admin dan siswa punya portal sendiri. JWT auth, role-based access — aman & terkontrol.' },
-  { icon: 'chart' as const, tone: 'sky' as const, title: 'Dashboard statistik', description: 'Lihat total kategori, ujian, siswa, dan aktivitas terbaru dalam satu tampilan.' },
-  { icon: 'rocket' as const, tone: 'pink' as const, title: 'Onboarding cepat', description: 'Daftar, login, langsung bisa ikut ujian. Nggak perlu setup ribet.' },
+  { label: 'Siswa aktif', value: '1.200+', icon: Users, tone: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-950/50 dark:text-indigo-400' },
+  { label: 'Ujian dibuat', value: '350+', icon: BookOpen, tone: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/50 dark:text-emerald-400' },
+  { label: 'Soal tersimpan', value: '8.000+', asset: '/assets/badge-brain.png', tone: 'text-amber-600 bg-amber-50 dark:bg-amber-950/50 dark:text-amber-400' },
+  { label: 'Rata-rata skor', value: '78%', icon: ShieldCheck, tone: 'text-rose-600 bg-rose-50 dark:bg-rose-950/50 dark:text-rose-400' },
 ]
 
 const sampleQuizzes = [
-  { title: 'Matematika Dasar', cat: 'Matematika', questions: 20, duration: 30, enrolled: 142, icon: 'target' as const, tone: 'violet' as const },
-  { title: 'IPA Terpadu', cat: 'IPA', questions: 25, duration: 45, enrolled: 98, icon: 'brain' as const, tone: 'mint' as const },
-  { title: 'Sejarah Indonesia', cat: 'Sejarah', questions: 15, duration: 20, enrolled: 76, icon: 'book' as const, tone: 'sun' as const },
-  { title: 'Bahasa Inggris', cat: 'Bahasa', questions: 30, duration: 40, enrolled: 115, icon: 'sparkles' as const, tone: 'coral' as const },
+  {
+    title: 'Matematika Logika & Aljabar',
+    cat: 'Matematika',
+    questions: 20,
+    duration: 30,
+    enrolled: 245,
+    difficulty: 'Sedang',
+    asset: '/assets/badge-target.png',
+  },
+  {
+    title: 'Fisika & Sains Lingkungan',
+    cat: 'Sains',
+    questions: 25,
+    duration: 35,
+    enrolled: 189,
+    difficulty: 'Menantang',
+    asset: '/assets/badge-brain.png',
+  },
+  {
+    title: 'Sejarah Kemerdekaan RI',
+    cat: 'Sejarah',
+    questions: 15,
+    duration: 20,
+    enrolled: 142,
+    difficulty: 'Mudah',
+    asset: '/assets/badge-trophy.png',
+  },
+  {
+    title: 'English Grammar & Vocabulary',
+    cat: 'Bahasa',
+    questions: 30,
+    duration: 40,
+    enrolled: 310,
+    difficulty: 'Sedang',
+    asset: '/assets/badge-timer.png',
+  },
+  {
+    title: 'Algoritma & Logika Pemrograman',
+    cat: 'Teknologi',
+    questions: 20,
+    duration: 25,
+    enrolled: 280,
+    difficulty: 'Menantang',
+    asset: '/assets/badge-brain.png',
+  },
+  {
+    title: 'Biologi Sel & Genetika Dasar',
+    cat: 'Sains',
+    questions: 18,
+    duration: 25,
+    enrolled: 120,
+    difficulty: 'Mudah',
+    asset: '/assets/badge-streak.png',
+  },
 ]
 
-const leaderboard = [
-  { rank: 1, name: 'Aisha R.', score: 98, xp: 1240 },
-  { rank: 2, name: 'Budi S.', score: 95, xp: 1180 },
-  { rank: 3, name: 'Citra M.', score: 92, xp: 1050 },
-  { rank: 4, name: 'Doni K.', score: 89, xp: 980 },
-  { rank: 5, name: 'Eva P.', score: 87, xp: 920 },
+const filteredQuizzes = computed(() => {
+  if (activeCategory.value === 'Semua') return sampleQuizzes
+  return sampleQuizzes.filter((q) => q.cat === activeCategory.value)
+})
+
+const features = [
+  {
+    asset: '/assets/badge-timer.png',
+    title: 'Live Countdown & Auto-Submit',
+    description: 'Timer real-time presisi per detik. Saat waktu habis, ujian terkirim otomatis demi transparansi & keadilan penuh.',
+  },
+  {
+    asset: '/assets/badge-brain.png',
+    title: 'Skor Instan & Pembahasan',
+    description: 'Siswa langsung menerima hasil beserta review komprehensif jawaban benar dan salah untuk percepatan belajar.',
+  },
+  {
+    asset: '/assets/badge-trophy.png',
+    title: 'Leaderboard & Kompetisi Sehat',
+    description: 'Klasemen dinamis siswa teratas memacu motivasi berprestasi dengan pembagian medali emas, perak, dan perunggu.',
+  },
+  {
+    asset: '/assets/badge-streak.png',
+    title: 'Daily Streak & Motivasi Belajar',
+    description: 'Bangun kebiasaan belajar konsisten tiap hari. Jaga api streak tetap menyala untuk klaim bonus multiplier XP.',
+  },
+  {
+    asset: '/assets/badge-target.png',
+    title: 'Target Skor & Akurasi Bank Soal',
+    description: 'Atur passing score per kategori ujian, acak urutan soal, dan pantau metrik kelulusan siswa secara akurat.',
+  },
+  {
+    asset: '/assets/mascot.png',
+    title: 'Portal Guru & Siswa Terpisah',
+    description: 'Dashboard khusus admin untuk mengelola bank ujian & hasil, serta antarmuka fokus bebas distraksi untuk siswa.',
+  },
 ]
 
-const badges = [
-  { name: 'Super Star', icon: 'sparkles' as const, tone: 'sun' as const },
-  { name: 'Quiz Champion', icon: 'trophy' as const, tone: 'coral' as const },
-  { name: 'Speed Runner', icon: 'timer' as const, tone: 'mint' as const },
-  { name: 'Brain Master', icon: 'brain' as const, tone: 'violet' as const },
+const badgeShowcase = [
+  {
+    name: 'Quiz Champion',
+    title: 'Juara Kelas',
+    asset: '/assets/badge-trophy.png',
+    criteria: 'Raih peringkat 1 di kuis mingguan',
+    xp: '+250 XP',
+    unlocked: true,
+  },
+  {
+    name: '7-Day Streak',
+    title: 'Disiplin Tangguh',
+    asset: '/assets/badge-streak.png',
+    criteria: 'Ikut ujian berturut-turut 7 hari',
+    xp: '+150 XP',
+    unlocked: true,
+  },
+  {
+    name: 'Speed Runner',
+    title: 'Kilat Tangkas',
+    asset: '/assets/badge-timer.png',
+    criteria: 'Selesaikan kuis di bawah 10 menit',
+    xp: '+120 XP',
+    unlocked: true,
+  },
+  {
+    name: 'Brain Master',
+    title: 'Cerdas Bersinar',
+    asset: '/assets/badge-brain.png',
+    criteria: 'Skor 100% tanpa salah pada 20 soal',
+    xp: '+300 XP',
+    unlocked: true,
+  },
+  {
+    name: 'Bullseye Sniper',
+    title: 'Bidik Akurat',
+    asset: '/assets/badge-target.png',
+    criteria: 'Akurasi di atas 90% dalam 5 ujian',
+    xp: '+200 XP',
+    unlocked: true,
+  },
 ]
 
-const lockedBadges = [
-  { name: 'Perfect Score', icon: 'target' as const },
-  { name: '7 Day Streak', icon: 'rocket' as const },
-  { name: 'Top 10', icon: 'chart' as const },
-]
+// Interactive Quiz Preview in Hero
+const selectedHeroOption = ref<number>(0)
+const heroAnswerSubmitted = ref(false)
+
+function pickHeroOption(idx: number) {
+  selectedHeroOption.value = idx
+  heroAnswerSubmitted.value = true
+}
 
 const faqs = [
-  { q: 'Gratis nggak?', a: 'Gratis untuk daftar dan ikut ujian. Admin bisa buat akun sendiri tanpa biaya.' },
-  { q: 'Bisa dipake di HP?', a: 'Bisa! Tampilan responsive, enak diakses dari browser HP atau laptop.' },
-  { q: 'Admin vs Siswa beda apa?', a: 'Admin kelola kategori, ujian, soal, dan lihat hasil semua siswa. Siswa cuma ikut ujian & lihat hasil sendiri.' },
-  { q: 'Timer-nya beneran jalan?', a: 'Iya, countdown server-side. Waktu habis = auto submit. Nggak bisa curang pause.' },
+  {
+    q: 'Apakah QuizMaster gratis digunakan?',
+    a: 'Ya, 100% gratis! Siapapun bisa mendaftar sebagai Siswa maupun Guru/Admin untuk membuat dan mengikuti ujian tanpa dipungut biaya.',
+  },
+  {
+    q: 'Bagaimana sistem penghitungan skor dan leaderboard bekerja?',
+    a: 'Sistem langsung mengevaluasi jawaban saat ujian diserahkan. Poin XP dihitung berdasarkan rasio jawaban benar serta kecepatan pengerjaan, yang langsung memperbarui klasemen leaderboard.',
+  },
+  {
+    q: 'Apakah aman dari kecurangan saat ujian berlangsung?',
+    a: 'Sangat aman! Timer ujian dikontrol ketat oleh server dengan fitur auto-submit seketika saat durasi habis, sehingga siswa tidak bisa memanipulasi waktu pengerjaan.',
+  },
+  {
+    q: 'Apakah QuizMaster nyaman digunakan di smartphone?',
+    a: 'Tentu saja! Desain QuizMaster dirancang responsif dan fleksibel dengan tombol sentuh yang nyaman diakses lewat browser ponsel, tablet, maupun laptop.',
+  },
 ]
 
 const navScrolled = ref(false)
 if (typeof window !== 'undefined') {
-  window.addEventListener('scroll', () => { navScrolled.value = window.scrollY > 12 })
+  window.addEventListener('scroll', () => {
+    navScrolled.value = window.scrollY > 16
+  })
 }
 </script>
 
 <template>
-  <div class="min-h-screen qm-mesh-bg">
-    <!-- Navbar -->
-    <header :class="['sticky top-0 z-50 transition-all', navScrolled ? 'border-b border-border bg-background/90 backdrop-blur-lg shadow-sm' : '']">
+  <div class="min-h-screen qm-mesh-bg text-foreground selection:bg-primary/20">
+    <!-- Navigation Header -->
+    <header
+      :class="[
+        'sticky top-0 z-50 transition-all duration-300',
+        navScrolled
+          ? 'border-b border-border/80 bg-background/85 backdrop-blur-md shadow-sm'
+          : 'bg-transparent',
+      ]"
+    >
       <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Logo size="md" />
-        <nav class="hidden items-center gap-6 text-sm font-semibold text-muted-foreground md:flex">
-          <a href="#fitur" class="hover:text-primary transition-colors">Fitur</a>
-          <a href="#kuis" class="hover:text-primary transition-colors">Contoh Kuis</a>
-          <a href="#badge" class="hover:text-primary transition-colors">Badge</a>
-          <a href="#faq" class="hover:text-primary transition-colors">FAQ</a>
+
+        <nav class="hidden items-center gap-7 text-sm font-bold text-muted-foreground md:flex">
+          <a href="#fitur" class="transition-colors hover:text-primary">Fitur</a>
+          <a href="#kuis" class="transition-colors hover:text-primary">Kuis Populer</a>
+          <a href="#badge" class="transition-colors hover:text-primary">Badge Prestasi</a>
+          <a href="#leaderboard" class="transition-colors hover:text-primary">Leaderboard</a>
+          <a href="#faq" class="transition-colors hover:text-primary">FAQ</a>
         </nav>
-        <div class="flex items-center gap-2">
-          <RouterLink to="/login"><Button variant="ghost" size="sm" class="rounded-full font-semibold">Masuk</Button></RouterLink>
-          <RouterLink to="/register"><Button variant="fun" size="sm" class="rounded-full">Daftar <ArrowRight class="size-3.5" /></Button></RouterLink>
+
+        <div class="flex items-center gap-3">
+          <RouterLink to="/login">
+            <Button variant="ghost" size="sm" class="rounded-xl font-bold text-foreground hover:text-primary">
+              Masuk
+            </Button>
+          </RouterLink>
+          <RouterLink to="/register">
+            <button
+              class="qm-btn-fun inline-flex items-center gap-1.5 px-4 py-2 text-xs uppercase tracking-wider"
+            >
+              Daftar Gratis <ArrowRight class="size-3.5" />
+            </button>
+          </RouterLink>
         </div>
       </div>
     </header>
 
-    <!-- Hero -->
-    <section class="px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
-      <div class="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-2">
-        <div>
-          <Badge variant="secondary" class="mb-4 rounded-full px-3 py-1 font-bold">🎮 Platform kuis yang fun & lengkap</Badge>
-          <h1 class="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-            Yuk lanjutin kuisnya,<br />
-            <span class="text-primary">jangan males!</span> 😄
-          </h1>
-          <p class="mt-4 max-w-lg text-base leading-relaxed text-muted-foreground">
-            QuizMaster bantu guru & admin ngelola ujian online dengan timer, skor instan, leaderboard, dan badge. Siswa belajar sambil fun — bukan cuma kertas & pensil.
-          </p>
-          <div class="mt-7 flex flex-wrap gap-3">
-            <RouterLink to="/register"><Button variant="fun" size="lg" class="rounded-2xl">Let's Go! <ArrowRight class="size-4" /></Button></RouterLink>
-            <RouterLink to="/login"><Button variant="outline" size="lg" class="rounded-2xl font-semibold">Sudah punya akun</Button></RouterLink>
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden px-4 pb-16 pt-8 sm:px-6 sm:pt-12 md:pb-24">
+      <div class="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-12">
+        <!-- Hero Text & Mascot Intro -->
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary mb-5 shadow-xs">
+            <Sparkles class="size-3.5 text-amber-500 fill-amber-500 animate-spin" style="animation-duration: 4s;" />
+            <span>Platform Kuis Interaktif & Seru</span>
           </div>
-          <!-- mini stats -->
-          <div class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div v-for="s in stats" :key="s.label" class="qm-card p-3 text-center">
-              <GlassIcon :name="s.icon" :tone="s.tone" :size="32" class="mx-auto mb-1" />
-              <p class="text-lg font-extrabold text-primary">{{ s.value }}</p>
-              <p class="text-[10px] font-semibold text-muted-foreground">{{ s.label }}</p>
+
+          <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-5xl leading-[1.18]">
+            Belajar & Ujian Jadi <br />
+            <span class="text-primary underline decoration-amber-400 decoration-wavy decoration-2 underline-offset-8">
+              Lebih Nagih
+            </span>, Bukan Membosankan! 🚀
+          </h1>
+
+          <p class="mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-muted-foreground">
+            QuizMaster mengubah sesi kuis membosankan menjadi petualangan belajar yang penuh tantangan. Raih skor tertinggi, koleksi badge 3D keren, dan buktikan kemampuanmu di podium juara!
+          </p>
+
+          <!-- CTAs -->
+          <div class="mt-8 flex flex-wrap items-center gap-4">
+            <RouterLink to="/register">
+              <button class="qm-btn-fun inline-flex items-center gap-2 px-6 py-3.5 text-base">
+                Mulai Ujian Sekarang <ArrowRight class="size-4" />
+              </button>
+            </RouterLink>
+            <a href="#kuis">
+              <Button variant="outline" size="lg" class="rounded-2xl border-2 font-bold px-5">
+                Jelajahi Bank Soal
+              </Button>
+            </a>
+          </div>
+
+          <!-- Mascot Speech Bubble Card -->
+          <div class="mt-8 flex items-center gap-4 rounded-2xl border border-border/80 bg-card/90 p-4 shadow-sm backdrop-blur-xs max-w-lg">
+            <div class="relative shrink-0">
+              <img
+                src="/assets/mascot.png"
+                alt="QuizMaster Mascot Hootie"
+                class="size-16 object-contain drop-shadow-md qm-bounce"
+              />
+              <span class="absolute -bottom-1 -right-1 flex size-5 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-bold text-white shadow-xs">
+                ✓
+              </span>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2">
+                <span class="font-extrabold text-xs uppercase tracking-wide text-primary">Hootie the Scholar</span>
+                <span class="rounded-full bg-amber-100 dark:bg-amber-950 px-2 py-0.5 text-[10px] font-extrabold text-amber-700 dark:text-amber-300">Maskot Resmi</span>
+              </div>
+              <p class="text-xs sm:text-sm text-muted-foreground mt-0.5 font-medium">
+                "Psst, rajin ikut kuis 15 menit sehari bikin streak kamu nyala terus dan XP melesat! Siap jadi juara?"
+              </p>
             </div>
           </div>
         </div>
 
-        <!-- Hero card — purple quiz preview -->
-        <div class="relative">
-          <div class="qm-card-plum p-6 sm:p-8 qm-float">
-            <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-2">
-                <div class="qm-avatar size-10 text-sm">{{ 'QM' }}</div>
+        <!-- Hero Gamified Live Quiz Card Preview -->
+        <div class="relative lg:col-span-5">
+          <!-- Floating Streak Badge (Bottom Left) -->
+          <div class="absolute -left-6 -bottom-5 z-20 hidden sm:flex items-center gap-2.5 rounded-2xl border border-amber-300/80 bg-card/95 p-3 shadow-lg backdrop-blur-md qm-float">
+            <img src="/assets/badge-streak.png" alt="Streak" class="size-11 object-contain drop-shadow-xs" />
+            <div>
+              <p class="text-[10px] font-extrabold uppercase text-amber-600 dark:text-amber-400">Daily Streak</p>
+              <p class="text-sm font-black">6 Hari Berturut 🔥</p>
+            </div>
+          </div>
+
+          <!-- Floating Trophy Badge (Top Right) -->
+          <div class="absolute -right-4 -top-6 z-20 flex items-center gap-2 rounded-2xl border border-primary/20 bg-card/95 p-2.5 shadow-lg backdrop-blur-md">
+            <img src="/assets/badge-trophy.png" alt="Trophy" class="size-11 object-contain drop-shadow-xs" />
+            <div class="pr-2">
+              <p class="text-[10px] font-extrabold text-muted-foreground">Peringkat Mingguan</p>
+              <p class="text-sm font-black text-primary">Rank #1 Nasional 🏆</p>
+            </div>
+          </div>
+
+          <!-- Main Purple Tactile Quiz Card -->
+          <div class="qm-card-plum relative z-10 p-6 sm:p-7 shadow-2xl">
+            <!-- Header bar -->
+            <div class="flex items-center justify-between border-b border-white/15 pb-4">
+              <div class="flex items-center gap-3">
+                <div class="flex size-10 items-center justify-center rounded-full bg-amber-400 font-black text-slate-900 shadow-inner">
+                  QM
+                </div>
                 <div>
-                  <p class="text-xs font-semibold text-white/70">Level Progress</p>
-                  <p class="text-sm font-bold">Gold · 323 XP</p>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-bold text-white/80">Kuis Matematika Ceria</span>
+                    <span class="rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-extrabold text-amber-300">Level 8</span>
+                  </div>
+                  <p class="text-sm font-extrabold text-white">Gold Tier · 1.240 XP</p>
                 </div>
               </div>
-              <Bell class="size-5 text-white/70" />
-            </div>
-            <ProgressBar :value="65" label="Progress ke Platinum" variant="purple" class="mb-5" />
-            <p class="text-sm font-semibold text-white/80 mb-1">03 Question</p>
-            <p class="text-lg font-bold mb-4">Rani punya 10 apel, dikasih 5. Total apel Rani?</p>
-            <div class="space-y-2">
-              <div v-for="(opt, i) in ['A. 15 apel', 'B. 10 apel', 'C. 5 apel', 'D. 20 apel']" :key="opt"
-                :class="['qm-option flex items-center gap-3 px-4 py-3 text-sm font-semibold', i === 0 ? 'qm-option-selected' : 'text-foreground']">
-                {{ opt }}
+              <div class="flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 font-mono text-xs font-black tracking-wider text-amber-300 border border-white/20">
+                <Timer class="size-3.5" /> 14:25
               </div>
             </div>
-            <div class="mt-4 flex items-center justify-between">
-              <span class="qm-timer rounded-full px-3 py-1 text-xs">⏱ 12:45</span>
-              <GlassIcon name="brain" tone="sun" :size="36" />
+
+            <!-- Question progress -->
+            <div class="mt-4">
+              <div class="flex justify-between text-xs font-bold text-white/80 mb-1.5">
+                <span>Soal 03 dari 10</span>
+                <span class="text-amber-300 font-black">+50 XP</span>
+              </div>
+              <ProgressBar :value="3" :max="10" variant="purple" />
+            </div>
+
+            <!-- Question text -->
+            <div class="mt-5">
+              <p class="text-base sm:text-lg font-bold text-white leading-snug">
+                Rani memiliki 12 apel. Ia membagikan 4 apel ke temannya dan membeli lagi 8 apel. Berapa sisa apel Rani sekarang?
+              </p>
+            </div>
+
+            <!-- Options Interactive -->
+            <div class="mt-4 space-y-2.5">
+              <button
+                v-for="(opt, idx) in [
+                  { label: 'A', text: '16 apel (Jawaban Tepat)' },
+                  { label: 'B', text: '12 apel' },
+                  { label: 'C', text: '8 apel' },
+                  { label: 'D', text: '20 apel' }
+                ]"
+                :key="opt.label"
+                type="button"
+                @click="pickHeroOption(idx)"
+                :class="[
+                  'w-full flex items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold transition-all',
+                  selectedHeroOption === idx
+                    ? 'bg-amber-400 text-slate-950 font-black shadow-md translate-x-1'
+                    : 'bg-white/10 hover:bg-white/20 text-white border border-white/15'
+                ]"
+              >
+                <div class="flex items-center gap-3">
+                  <span
+                    :class="[
+                      'flex size-6 items-center justify-center rounded-md text-xs font-black',
+                      selectedHeroOption === idx ? 'bg-slate-900 text-amber-400' : 'bg-white/20 text-white'
+                    ]"
+                  >
+                    {{ opt.label }}
+                  </span>
+                  <span>{{ opt.text }}</span>
+                </div>
+                <CheckCircle2 v-if="selectedHeroOption === idx" class="size-4 text-slate-950" />
+              </button>
+            </div>
+
+            <!-- Feedback hint & Action -->
+            <div class="mt-5 flex items-center justify-between border-t border-white/15 pt-3">
+              <div class="flex items-center gap-2 text-xs font-bold text-emerald-300">
+                <span class="inline-block size-2 rounded-full bg-emerald-400 animate-ping" />
+                <span>{{ heroAnswerSubmitted ? 'Pilihan tersimpan! +50 XP 🚀' : 'Klik opsi untuk mencoba simulasi' }}</span>
+              </div>
+              <img src="/assets/badge-brain.png" alt="Brain" class="size-8 object-contain" />
             </div>
           </div>
-          <!-- streak card -->
-          <div class="absolute -bottom-5 -left-3 qm-card-yellow px-4 py-3 sm:-left-6">
-            <p class="text-xs font-bold uppercase tracking-wide opacity-70">Streak</p>
-            <p class="text-2xl font-extrabold">6 hari 🔥</p>
-          </div>
-          <!-- rank card -->
-          <div class="absolute -right-3 -top-4 qm-card px-3 py-2 shadow-lg sm:-right-5">
-            <div class="flex items-center gap-2">
-              <GlassIcon name="trophy" tone="sun" :size="32" />
-              <div><p class="text-[10px] text-muted-foreground">Ranking</p><p class="text-sm font-extrabold">#3 🏆</p></div>
+        </div>
+      </div>
+
+      <!-- Quick Stats Strip -->
+      <div class="mx-auto mt-14 max-w-6xl">
+        <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+          <div
+            v-for="s in stats"
+            :key="s.label"
+            class="qm-card flex items-center gap-3.5 p-4 transition-all"
+          >
+            <div v-if="s.asset" class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-amber-50 dark:bg-amber-950/40">
+              <img :src="s.asset" :alt="s.label" class="size-9 object-contain" />
+            </div>
+            <div v-else :class="['flex size-12 shrink-0 items-center justify-center rounded-2xl', s.tone]">
+              <component :is="s.icon" class="size-6" />
+            </div>
+            <div>
+              <p class="text-xl font-extrabold tracking-tight text-foreground">{{ s.value }}</p>
+              <p class="text-xs font-bold text-muted-foreground">{{ s.label }}</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Category pills + sample quizzes -->
-    <section id="kuis" class="px-4 py-14 sm:px-6">
+    <!-- Popular Quizzes Section -->
+    <section id="kuis" class="border-t border-border/60 bg-muted/20 px-4 py-16 sm:px-6 md:py-20">
       <div class="mx-auto max-w-6xl">
-        <h2 class="text-2xl font-extrabold sm:text-3xl">Contoh kuis populer</h2>
-        <p class="mt-2 text-muted-foreground">Filter kategori kayak di app — admin bisa buat sebanyak apapun.</p>
-        <div class="mt-5 flex flex-wrap gap-2">
-          <button v-for="cat in categories" :key="cat" type="button"
-            :class="['qm-pill', activeCategory === cat && 'qm-pill-active']"
-            @click="activeCategory = cat">{{ cat }}</button>
-        </div>
-        <div class="mt-6 grid gap-4 sm:grid-cols-2">
-          <div v-for="quiz in sampleQuizzes" :key="quiz.title" class="qm-card flex items-center gap-4 p-4">
-            <GlassIcon :name="quiz.icon" :tone="quiz.tone" :size="52" />
-            <div class="flex-1 min-w-0">
-              <p class="font-bold truncate">{{ quiz.title }}</p>
-              <p class="text-xs text-muted-foreground">{{ quiz.cat }} · {{ quiz.questions }} soal · {{ quiz.duration }} menit</p>
-              <p class="text-xs font-semibold text-primary mt-0.5">{{ quiz.enrolled }} siswa ikut</p>
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+          <div>
+            <div class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 dark:bg-amber-950/60 px-3 py-0.5 text-xs font-extrabold text-amber-700 dark:text-amber-300 mb-2">
+              <BookOpen class="size-3.5" /> Eksplorasi Materi
             </div>
-            <ChevronRight class="size-5 text-muted-foreground shrink-0" />
+            <h2 class="text-2xl font-extrabold sm:text-3xl tracking-tight">Kuis Populer Pilihan</h2>
+            <p class="mt-1 text-sm text-muted-foreground max-w-xl">
+              Pilih kategori favoritmu atau buat ujian custom di portal admin. Soal terstruktur lengkap dengan timer otomatis.
+            </p>
+          </div>
+
+          <!-- Category Filter Pills -->
+          <div class="flex flex-wrap gap-2">
+            <button
+              v-for="cat in categories"
+              :key="cat"
+              type="button"
+              :class="['qm-pill', activeCategory === cat && 'qm-pill-active']"
+              @click="activeCategory = cat"
+            >
+              {{ cat }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Quizzes Grid -->
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            v-for="quiz in filteredQuizzes"
+            :key="quiz.title"
+            class="qm-card group relative flex flex-col justify-between p-5 overflow-hidden"
+          >
+            <div>
+              <!-- Top tags -->
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-extrabold text-primary">
+                  {{ quiz.cat }}
+                </span>
+                <span
+                  :class="[
+                    'rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase',
+                    quiz.difficulty === 'Mudah' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' :
+                    quiz.difficulty === 'Sedang' ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300' :
+                    'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'
+                  ]"
+                >
+                  {{ quiz.difficulty }}
+                </span>
+              </div>
+
+              <!-- Content with 3D Badge -->
+              <div class="flex items-start gap-3.5">
+                <img
+                  :src="quiz.asset"
+                  :alt="quiz.title"
+                  class="size-12 shrink-0 object-contain drop-shadow-xs transition-transform duration-200 group-hover:scale-110"
+                />
+                <div>
+                  <h3 class="font-extrabold text-base leading-snug group-hover:text-primary transition-colors">
+                    {{ quiz.title }}
+                  </h3>
+                  <div class="mt-2 flex items-center gap-3 text-xs text-muted-foreground font-semibold">
+                    <span class="flex items-center gap-1"><BookOpen class="size-3.5" /> {{ quiz.questions }} soal</span>
+                    <span class="flex items-center gap-1"><Timer class="size-3.5" /> {{ quiz.duration }} mnt</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer Card -->
+            <div class="mt-5 flex items-center justify-between border-t border-border/80 pt-3 text-xs">
+              <span class="font-bold text-muted-foreground flex items-center gap-1">
+                <Users class="size-3.5 text-primary" /> {{ quiz.enrolled }} siswa ikut
+              </span>
+              <RouterLink to="/login" class="inline-flex items-center gap-1 font-extrabold text-primary hover:underline">
+                Ikut Kuis <ChevronRight class="size-4" />
+              </RouterLink>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Features grid -->
-    <section id="fitur" class="px-4 py-14 sm:px-6 bg-secondary/40">
+    <!-- Features Section -->
+    <section id="fitur" class="px-4 py-16 sm:px-6 md:py-24">
       <div class="mx-auto max-w-6xl">
-        <h2 class="text-center text-2xl font-extrabold sm:text-3xl">Semua fitur yang kamu butuhin</h2>
-        <p class="text-center mt-2 text-muted-foreground max-w-xl mx-auto">Dari admin panel sampai leaderboard — lengkap, tapi tetap fun.</p>
-        <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <div v-for="f in features" :key="f.title" class="qm-card p-5">
-            <GlassIcon :name="f.icon" :tone="f.tone" :size="48" class="mb-3" />
-            <h3 class="font-bold">{{ f.title }}</h3>
-            <p class="mt-1.5 text-sm text-muted-foreground leading-relaxed">{{ f.description }}</p>
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <div class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-extrabold text-primary mb-3">
+            <Sparkles class="size-3.5 text-primary" /> Fitur Unggulan
           </div>
+          <h2 class="text-3xl font-extrabold sm:text-4xl tracking-tight">
+            Dirancang untuk Guru Profesional, Dicintai oleh Siswa
+          </h2>
+          <p class="mt-3 text-muted-foreground text-sm sm:text-base leading-relaxed">
+            Semua kebutuhan evaluasi belajar digital ada di sini. Cepat, adil, transparan, dan pastinya seru untuk dimainkan.
+          </p>
         </div>
-      </div>
-    </section>
 
-    <!-- Badges + Leaderboard side by side -->
-    <section id="badge" class="px-4 py-14 sm:px-6">
-      <div class="mx-auto max-w-6xl grid gap-8 lg:grid-cols-2">
-        <!-- Badges -->
-        <div class="qm-card p-6">
-          <h2 class="text-xl font-extrabold mb-1">My Badges 🏅</h2>
-          <p class="text-sm text-muted-foreground mb-5">Kumpulin badge dengan ikut ujian & raih skor tinggi.</p>
-          <div class="flex flex-wrap gap-4 justify-center sm:justify-start">
-            <HexBadge v-for="b in badges" :key="b.name" :name="b.name" :icon="b.icon" :tone="b.tone" />
-          </div>
-          <p class="mt-6 text-xs font-bold uppercase tracking-wide text-muted-foreground">Locked Badges</p>
-          <div class="mt-3 flex flex-wrap gap-4 justify-center sm:justify-start">
-            <HexBadge v-for="b in lockedBadges" :key="b.name" :name="b.name" :icon="b.icon" tone="violet" locked />
-          </div>
-        </div>
-        <!-- Leaderboard -->
-        <div class="qm-card p-6">
-          <h2 class="text-xl font-extrabold mb-1">Ranking 🌍</h2>
-          <p class="text-sm text-muted-foreground mb-5">Lihat siapa yang paling jago di leaderboard.</p>
-          <div class="flex gap-2 mb-4">
-            <span class="qm-pill qm-pill-active">World</span>
-            <span class="qm-pill">Weekly</span>
-            <span class="qm-pill">Friends</span>
-          </div>
-          <div class="space-y-2">
-            <div v-for="entry in leaderboard" :key="entry.rank"
-              class="flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-secondary/60"
-              :class="entry.rank <= 3 ? 'bg-accent/60' : ''">
-              <span class="w-8 text-center font-extrabold text-primary">{{ entry.rank <= 3 ? ['🥇','🥈','🥉'][entry.rank-1] : `#${entry.rank}` }}</span>
-              <div class="qm-avatar size-9 text-xs">{{ entry.name.charAt(0) }}</div>
-              <div class="flex-1"><p class="font-bold text-sm">{{ entry.name }}</p><p class="text-xs text-muted-foreground">{{ entry.xp }} XP</p></div>
-              <span class="font-extrabold text-primary">{{ entry.score }}%</span>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            v-for="f in features"
+            :key="f.title"
+            class="qm-card flex flex-col justify-between p-6 transition-all"
+          >
+            <div>
+              <div class="mb-4 flex size-14 items-center justify-center rounded-2xl bg-secondary/80">
+                <img :src="f.asset" :alt="f.title" class="size-11 object-contain drop-shadow-xs" />
+              </div>
+              <h3 class="text-lg font-extrabold mb-2">{{ f.title }}</h3>
+              <p class="text-sm leading-relaxed text-muted-foreground font-medium">
+                {{ f.description }}
+              </p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- FAQ -->
-    <section id="faq" class="px-4 py-14 sm:px-6 bg-secondary/40">
+    <!-- Badges & Achievements Showcase -->
+    <section id="badge" class="border-t border-border/60 bg-muted/20 px-4 py-16 sm:px-6 md:py-24">
+      <div class="mx-auto max-w-6xl">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <div class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 dark:bg-amber-950/60 px-3 py-1 text-xs font-extrabold text-amber-700 dark:text-amber-300 mb-3">
+            <Trophy class="size-3.5" /> Gamifikasi & Prestasi
+          </div>
+          <h2 class="text-3xl font-extrabold sm:text-4xl tracking-tight">
+            Koleksi 3D Badge Prestasi Kamu
+          </h2>
+          <p class="mt-3 text-muted-foreground text-sm sm:text-base leading-relaxed">
+            Setiap jawaban tepat dan konsistensi belajarmu diganjar lencana prestasi eksklusif untuk dipamerkan di profil siswa.
+          </p>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+          <div
+            v-for="b in badgeShowcase"
+            :key="b.name"
+            class="qm-card flex flex-col items-center p-5 text-center transition-all group"
+          >
+            <div class="relative mb-3 flex size-20 items-center justify-center rounded-2xl bg-secondary/70 group-hover:scale-110 transition-transform">
+              <img :src="b.asset" :alt="b.name" class="size-16 object-contain drop-shadow-md" />
+            </div>
+            <span class="rounded-full bg-amber-100 dark:bg-amber-950 px-2 py-0.5 text-[10px] font-black text-amber-700 dark:text-amber-300">
+              {{ b.xp }}
+            </span>
+            <h4 class="mt-2 font-extrabold text-sm">{{ b.name }}</h4>
+            <p class="text-xs font-semibold text-primary">{{ b.title }}</p>
+            <p class="mt-2 text-[11px] leading-snug text-muted-foreground">{{ b.criteria }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leaderboard Podium Section -->
+    <section id="leaderboard" class="px-4 py-16 sm:px-6 md:py-24">
+      <div class="mx-auto max-w-5xl">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <div class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-extrabold text-primary mb-3">
+            <Flame class="size-3.5 text-amber-500 fill-amber-500" /> Papan Peringkat
+          </div>
+          <h2 class="text-3xl font-extrabold sm:text-4xl tracking-tight">
+            Podium Juara QuizMaster
+          </h2>
+          <p class="mt-3 text-muted-foreground text-sm sm:text-base leading-relaxed">
+            Kuis bukan cuma nilai, tapi ajang adu kecerdasan dan ketangkasan bersama teman-temanmu se-Indonesia!
+          </p>
+        </div>
+
+        <!-- 3-Podium Visualization -->
+        <div class="mb-10 grid grid-cols-3 items-end gap-3 sm:gap-6 pt-10">
+          <!-- Rank 2 (Silver) -->
+          <div class="flex flex-col items-center">
+            <div class="relative mb-2">
+              <div class="qm-avatar size-14 sm:size-16 text-sm font-black border-slate-300 bg-slate-100 text-slate-700">
+                BS
+              </div>
+              <span class="absolute -bottom-1 -right-1 flex size-6 items-center justify-center rounded-full bg-slate-300 text-xs font-black text-slate-800 shadow-xs">
+                2
+              </span>
+            </div>
+            <p class="font-extrabold text-xs sm:text-sm text-center truncate w-full">Budi Santoso</p>
+            <p class="text-[11px] font-bold text-muted-foreground">1.180 XP</p>
+            <div class="mt-3 w-full rounded-t-2xl border border-slate-300/80 bg-slate-100 dark:bg-slate-800/80 p-3 sm:p-4 text-center h-28 sm:h-32 flex flex-col justify-center items-center shadow-xs">
+              <span class="text-2xl sm:text-3xl">🥈</span>
+              <span class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mt-1">95% Skor</span>
+            </div>
+          </div>
+
+          <!-- Rank 1 (Gold - Taller & Highlighted) -->
+          <div class="flex flex-col items-center -translate-y-4">
+            <div class="relative mb-2">
+              <div class="qm-avatar size-18 sm:size-20 text-base font-black border-amber-400 bg-amber-100 text-amber-800 shadow-md">
+                AR
+              </div>
+              <span class="absolute -bottom-1 -right-1 flex size-7 items-center justify-center rounded-full bg-amber-400 text-sm font-black text-slate-950 shadow-md">
+                👑
+              </span>
+            </div>
+            <p class="font-extrabold text-sm sm:text-base text-center truncate w-full text-primary">Aisha Rahma</p>
+            <p class="text-xs font-black text-amber-600 dark:text-amber-400">1.240 XP</p>
+            <div class="mt-3 w-full rounded-t-2xl border-2 border-amber-400 bg-gradient-to-b from-amber-200/50 to-amber-100/30 dark:from-amber-950/60 dark:to-amber-900/30 p-4 text-center h-36 sm:h-40 flex flex-col justify-center items-center shadow-md">
+              <span class="text-3xl sm:text-4xl animate-bounce" style="animation-duration: 2s;">🥇</span>
+              <span class="text-xs sm:text-sm font-black text-amber-800 dark:text-amber-200 mt-1">98% Skor Rata-rata</span>
+            </div>
+          </div>
+
+          <!-- Rank 3 (Bronze) -->
+          <div class="flex flex-col items-center">
+            <div class="relative mb-2">
+              <div class="qm-avatar size-14 sm:size-16 text-sm font-black border-amber-700 bg-amber-50 text-amber-900">
+                CM
+              </div>
+              <span class="absolute -bottom-1 -right-1 flex size-6 items-center justify-center rounded-full bg-amber-700 text-xs font-black text-white shadow-xs">
+                3
+              </span>
+            </div>
+            <p class="font-extrabold text-xs sm:text-sm text-center truncate w-full">Citra Melati</p>
+            <p class="text-[11px] font-bold text-muted-foreground">1.050 XP</p>
+            <div class="mt-3 w-full rounded-t-2xl border border-amber-700/40 bg-amber-50 dark:bg-amber-950/40 p-3 sm:p-4 text-center h-24 sm:h-28 flex flex-col justify-center items-center shadow-xs">
+              <span class="text-2xl sm:text-3xl">🥉</span>
+              <span class="text-xs font-extrabold text-amber-800 dark:text-amber-300 mt-1">92% Skor</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rank 4-5 Rows -->
+        <div class="qm-card divide-y divide-border/80 overflow-hidden">
+          <div class="flex items-center justify-between p-4 px-6 hover:bg-secondary/40 transition-colors">
+            <div class="flex items-center gap-3">
+              <span class="font-black text-muted-foreground text-sm w-6">#4</span>
+              <div class="qm-avatar size-9 text-xs font-bold">DK</div>
+              <div>
+                <p class="font-extrabold text-sm">Doni Kusuma</p>
+                <p class="text-xs text-muted-foreground font-semibold">980 XP · 4 Ujian Selesai</p>
+              </div>
+            </div>
+            <span class="font-black text-primary text-sm">89%</span>
+          </div>
+
+          <div class="flex items-center justify-between p-4 px-6 hover:bg-secondary/40 transition-colors">
+            <div class="flex items-center gap-3">
+              <span class="font-black text-muted-foreground text-sm w-6">#5</span>
+              <div class="qm-avatar size-9 text-xs font-bold">EP</div>
+              <div>
+                <p class="font-extrabold text-sm">Eva Permata</p>
+                <p class="text-xs text-muted-foreground font-semibold">920 XP · 3 Ujian Selesai</p>
+              </div>
+            </div>
+            <span class="font-black text-primary text-sm">87%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="border-t border-border/60 bg-muted/20 px-4 py-16 sm:px-6 md:py-20">
       <div class="mx-auto max-w-3xl">
-        <h2 class="text-center text-2xl font-extrabold">Pertanyaan sering ditanya</h2>
-        <div class="mt-8 space-y-3">
-          <details v-for="faq in faqs" :key="faq.q" class="qm-card group p-5 cursor-pointer">
-            <summary class="font-bold list-none flex items-center justify-between">
-              {{ faq.q }}
-              <ChevronRight class="size-4 transition-transform group-open:rotate-90" />
+        <div class="text-center mb-10">
+          <div class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-extrabold text-primary mb-2">
+            <HelpCircle class="size-3.5" /> Ada Pertanyaan?
+          </div>
+          <h2 class="text-2xl font-extrabold sm:text-3xl tracking-tight">Pertanyaan yang Sering Diajukan</h2>
+        </div>
+
+        <div class="space-y-3">
+          <details
+            v-for="faq in faqs"
+            :key="faq.q"
+            class="qm-card group cursor-pointer p-5 transition-all"
+          >
+            <summary class="flex list-none items-center justify-between font-bold text-sm sm:text-base">
+              <span>{{ faq.q }}</span>
+              <ChevronRight class="size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-90" />
             </summary>
-            <p class="mt-3 text-sm text-muted-foreground leading-relaxed">{{ faq.a }}</p>
+            <p class="mt-3 text-sm leading-relaxed text-muted-foreground font-medium pt-2 border-t border-border/50">
+              {{ faq.a }}
+            </p>
           </details>
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="px-4 py-14 sm:px-6">
-      <div class="qm-card-plum mx-auto max-w-3xl p-8 sm:p-12 text-center">
-        <GlassIcon name="rocket" tone="sun" :size="64" class="mx-auto mb-4" />
-        <h2 class="text-2xl font-extrabold sm:text-3xl">Siap jadi Quiz Master?</h2>
-        <p class="mx-auto mt-3 max-w-md text-white/80">Daftar gratis, buat ujian pertamamu, dan lihat siswa berlomba di leaderboard!</p>
-        <RouterLink to="/register"><Button variant="fun" size="lg" class="mt-8 rounded-2xl">Gas Daftar! <ArrowRight class="size-4" /></Button></RouterLink>
+    <!-- Final Call To Action -->
+    <section class="px-4 py-16 sm:px-6 md:py-20">
+      <div class="qm-card-plum relative mx-auto max-w-4xl overflow-hidden p-8 sm:p-12 text-center shadow-2xl">
+        <!-- Mascot Peek -->
+        <div class="mx-auto mb-4 flex justify-center">
+          <div class="relative">
+            <img
+              src="/assets/mascot.png"
+              alt="Mascot Hootie"
+              class="size-24 object-contain drop-shadow-xl qm-bounce"
+            />
+            <img
+              src="/assets/badge-trophy.png"
+              alt="Trophy"
+              class="absolute -right-3 -top-2 size-10 object-contain drop-shadow-md"
+            />
+          </div>
+        </div>
+
+        <h2 class="text-2xl font-black sm:text-4xl tracking-tight text-white leading-tight">
+          Siap Jadi Quiz Master Sejati?
+        </h2>
+        <p class="mx-auto mt-3 max-w-lg text-sm sm:text-base text-white/85 font-medium leading-relaxed">
+          Gabung bersama ribuan siswa dan pengajar lainnya. Daftarkan akun gratis sekarang dan nikmati pengalaman kuis online paling seru!
+        </p>
+
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <RouterLink to="/register">
+            <button class="qm-btn-fun inline-flex items-center gap-2 px-8 py-3.5 text-base">
+              Daftar Gratis Sekarang <ArrowRight class="size-4" />
+            </button>
+          </RouterLink>
+          <RouterLink to="/login">
+            <Button variant="outline" size="lg" class="rounded-2xl border-2 border-white/30 bg-white/10 text-white hover:bg-white/20 font-bold px-6">
+              Masuk Akun
+            </Button>
+          </RouterLink>
+        </div>
       </div>
     </section>
 
-    <footer class="border-t border-border px-4 py-10 text-center">
+    <!-- Footer -->
+    <footer class="border-t border-border/80 px-4 py-12 text-center">
       <Logo size="sm" class="mx-auto mb-4 justify-center" />
-      <div class="flex flex-wrap justify-center gap-4 text-sm font-semibold text-muted-foreground mb-4">
-        <RouterLink to="/login" class="hover:text-primary">Masuk</RouterLink>
-        <RouterLink to="/register" class="hover:text-primary">Daftar</RouterLink>
-        <a href="#fitur" class="hover:text-primary">Fitur</a>
-        <a href="#faq" class="hover:text-primary">FAQ</a>
+      <div class="flex flex-wrap justify-center gap-6 text-sm font-bold text-muted-foreground mb-4">
+        <a href="#fitur" class="hover:text-primary transition-colors">Fitur</a>
+        <a href="#kuis" class="hover:text-primary transition-colors">Kuis Populer</a>
+        <a href="#badge" class="hover:text-primary transition-colors">Badge</a>
+        <a href="#leaderboard" class="hover:text-primary transition-colors">Leaderboard</a>
+        <a href="#faq" class="hover:text-primary transition-colors">FAQ</a>
+        <RouterLink to="/login" class="hover:text-primary transition-colors">Portal Masuk</RouterLink>
       </div>
-      <p class="text-xs text-muted-foreground">QuizMaster &copy; {{ new Date().getFullYear() }} — Kuis online, tapi seru.</p>
+      <p class="text-xs text-muted-foreground font-semibold">
+        QuizMaster &copy; {{ new Date().getFullYear() }} — Platform kuis dan ujian online interaktif. Dibuat dengan penuh semangat untuk pendidikan Indonesia.
+      </p>
     </footer>
   </div>
 </template>
