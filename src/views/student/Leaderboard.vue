@@ -35,7 +35,13 @@ onMounted(async () => {
     <RouterLink to="/student/exams" class="text-sm font-medium text-primary hover:underline">
       ← Kembali ke ujian
     </RouterLink>
-    <PageHeader title="Leaderboard 🏆" :description="`Ranking skor ujian #${examId}`" icon="trophy" tone="sun" />
+    <PageHeader
+      title="Leaderboard 🏆"
+      :description="`Ranking skor ujian #${examId}`"
+      icon="trophy"
+      tone="sun"
+      imageSrc="/assets/logo-leaderboard.png"
+    />
 
     <p v-if="error" class="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive">{{ error }}</p>
 

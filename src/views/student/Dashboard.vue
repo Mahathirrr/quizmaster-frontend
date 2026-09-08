@@ -18,7 +18,13 @@ const data = ref<StudentDashboard | null>(null)
 const loading = ref(true)
 const error = ref('')
 const activeCategory = ref('Semua')
-const categories = ['Semua', 'Matematika', 'IPA', 'Bahasa', 'Sejarah']
+const categoryMeta = [
+  { name: 'Semua', asset: '/assets/icon-dashboard.png' },
+  { name: 'Matematika', asset: '/assets/cat-math.png' },
+  { name: 'IPA', asset: '/assets/cat-science.png' },
+  { name: 'Bahasa', asset: '/assets/cat-language.png' },
+  { name: 'Sejarah', asset: '/assets/cat-history.png' },
+]
 
 const xp = computed(() => Math.round((data.value?.average_score ?? 0) * 10))
 const level = computed(() => {
@@ -77,8 +83,8 @@ onMounted(async () => {
           </div>
         </div>
         <RouterLink to="/student/exams">
-          <button class="qm-btn-fun inline-flex items-center gap-2 px-5 py-2.5 text-sm">
-            <img src="/assets/badge-target.png" alt="Quiz" class="size-5 object-contain" />
+          <button class="qm-btn-fun inline-flex items-center gap-2.5 px-5 py-2.5 text-sm">
+            <img src="/assets/icon-take-exam.png" alt="Quiz" class="size-5.5 object-contain" />
             Mulai Kuis Baru
           </button>
         </RouterLink>
@@ -89,7 +95,7 @@ onMounted(async () => {
     <!-- Streak banner -->
     <div class="qm-card-yellow flex flex-wrap items-center justify-between gap-4 p-5">
       <div class="flex items-center gap-4">
-        <img src="/assets/badge-streak.png" alt="Streak Flame" class="size-16 object-contain drop-shadow-sm qm-bounce" />
+        <img src="/assets/badge-streak.png" alt="Streak Flame" class="size-16 object-contain drop-shadow-sm" />
         <div>
           <p class="text-xs font-black uppercase tracking-wider opacity-75">Daily Learning Streak</p>
           <p class="text-2xl sm:text-3xl font-black">{{ streak }} Hari Berturut 🔥</p>
@@ -112,13 +118,20 @@ onMounted(async () => {
       <StatCard label="Rata-rata Skor" :value="`${data?.average_score ?? 0}%`" icon="chart" tone="sun" :loading="loading" />
     </div>
 
-    <!-- Category pills -->
+    <!-- Category pills with 3D icons -->
     <div>
-      <h2 class="font-extrabold mb-3">Kategori Ujian</h2>
-      <div class="flex flex-wrap gap-2">
-        <button v-for="cat in categories" :key="cat" type="button"
-          :class="['qm-pill', activeCategory === cat && 'qm-pill-active']"
-          @click="activeCategory = cat">{{ cat }}</button>
+      <h2 class="font-extrabold mb-3">Kategori Ujian 📚</h2>
+      <div class="flex flex-wrap gap-2.5">
+        <button
+          v-for="cat in categoryMeta"
+          :key="cat.name"
+          type="button"
+          :class="['qm-pill inline-flex items-center gap-2', activeCategory === cat.name && 'qm-pill-active']"
+          @click="activeCategory = cat.name"
+        >
+          <img :src="cat.asset" :alt="cat.name" class="size-4.5 object-contain" />
+          {{ cat.name }}
+        </button>
       </div>
     </div>
 

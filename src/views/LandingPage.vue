@@ -30,7 +30,7 @@ const activeCategory = ref('Semua')
 
 const categories = ['Semua', 'Matematika', 'Sains', 'Bahasa', 'Sejarah', 'Teknologi']
 
-// 4 Cohesive Stats using 100% 3D generated assets
+// Stat cards
 const stats = [
   {
     label: 'Siswa aktif terdaftar',
@@ -66,7 +66,7 @@ const sampleQuizzes = [
     duration: 30,
     enrolled: 245,
     difficulty: 'Sedang',
-    asset: '/assets/badge-target.png',
+    asset: '/assets/cat-math.png',
   },
   {
     title: 'Fisika & Sains Lingkungan',
@@ -75,7 +75,7 @@ const sampleQuizzes = [
     duration: 35,
     enrolled: 189,
     difficulty: 'Menantang',
-    asset: '/assets/badge-brain.png',
+    asset: '/assets/cat-science.png',
   },
   {
     title: 'Sejarah Kemerdekaan RI',
@@ -111,7 +111,7 @@ const sampleQuizzes = [
     duration: 25,
     enrolled: 120,
     difficulty: 'Mudah',
-    asset: '/assets/badge-streak.png',
+    asset: '/assets/cat-science.png',
   },
 ]
 
@@ -249,7 +249,7 @@ if (typeof window !== 'undefined') {
         <nav class="hidden items-center gap-7 text-sm font-bold text-muted-foreground md:flex">
           <a href="#fitur" class="transition-colors hover:text-primary">Fitur</a>
           <a href="#kuis" class="transition-colors hover:text-primary">Kuis Populer</a>
-          <a href="#badge" class="transition-colors hover:text-primary">Badge Prestasi</a>
+          <a href="#badge" class="transition-colors hover:text-primary">Lencana Prestasi</a>
           <a href="#leaderboard" class="transition-colors hover:text-primary">Leaderboard</a>
           <a href="#faq" class="transition-colors hover:text-primary">FAQ</a>
         </nav>
@@ -289,13 +289,14 @@ if (typeof window !== 'undefined') {
           </h1>
 
           <p class="mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-muted-foreground">
-            QuizMaster menghadirkan pengalaman evaluasi belajar modern dengan live countdown timer, skor otomatis, leaderboard kompetitif, dan koleksi 3D badge prestasi yang bikin siswa makin termotivasi.
+            QuizMaster menghadirkan pengalaman evaluasi belajar modern dengan live countdown timer, skor otomatis, leaderboard kompetitif, dan sistem gamifikasi yang memotivasi siswa belajar konsisten.
           </p>
 
           <!-- CTAs -->
           <div class="mt-8 flex flex-wrap items-center gap-4">
             <RouterLink to="/register">
-              <button class="qm-btn-fun inline-flex items-center gap-2 px-6 py-3.5 text-base">
+              <button class="qm-btn-fun inline-flex items-center gap-2.5 px-6 py-3.5 text-base">
+                <img src="/assets/icon-take-exam.png" alt="Mulai Ujian" class="size-6 object-contain" />
                 Mulai Ujian Gratis <ArrowRight class="size-4" />
               </button>
             </RouterLink>
@@ -437,7 +438,7 @@ if (typeof window !== 'undefined') {
             :key="s.label"
             class="qm-card flex items-center gap-4 p-5 transition-all duration-200 hover:border-primary/40"
           >
-            <!-- 3D Generated Asset Icon (Clear, no ugly brown boxes) -->
+            <!-- Stat icon -->
             <img
               :src="s.asset"
               :alt="s.label"
@@ -508,7 +509,7 @@ if (typeof window !== 'undefined') {
                 </span>
               </div>
 
-              <!-- Content with 3D Badge -->
+              <!-- Quiz card icon -->
               <div class="flex items-start gap-3.5">
                 <img
                   :src="quiz.asset"
@@ -584,10 +585,10 @@ if (typeof window !== 'undefined') {
             <Trophy class="size-3.5" /> Gamifikasi & Prestasi
           </div>
           <h2 class="text-3xl font-extrabold sm:text-4xl tracking-tight">
-            Koleksi 3D Badge Prestasi Kamu
+            Lencana Prestasi Belajarmu
           </h2>
           <p class="mt-3 text-muted-foreground text-sm sm:text-base leading-relaxed">
-            Setiap jawaban tepat dan konsistensi belajarmu diganjar lencana prestasi eksklusif untuk dipamerkan di profil siswa.
+            Setiap jawaban tepat dan konsistensi belajarmu diganjar lencana prestasi yang bisa dipamerkan di profil siswa.
           </p>
         </div>
 
@@ -615,6 +616,11 @@ if (typeof window !== 'undefined') {
     <section id="leaderboard" class="px-4 py-16 sm:px-6 md:py-24">
       <div class="mx-auto max-w-5xl">
         <div class="text-center max-w-2xl mx-auto mb-12">
+          <img
+            src="/assets/logo-leaderboard.png"
+            alt="3D Leaderboard Trophy"
+            class="mx-auto size-24 sm:size-28 object-contain drop-shadow-md mb-3"
+          />
           <div class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-extrabold text-primary mb-3">
             <Flame class="size-3.5 text-amber-500 fill-amber-500" /> Papan Peringkat
           </div>
@@ -760,7 +766,8 @@ if (typeof window !== 'undefined') {
 
         <div class="mt-8 flex flex-wrap justify-center gap-4">
           <RouterLink to="/register">
-            <button class="qm-btn-fun inline-flex items-center gap-2 px-8 py-3.5 text-base">
+            <button class="qm-btn-fun inline-flex items-center gap-2.5 px-8 py-3.5 text-base">
+              <img src="/assets/icon-take-exam.png" alt="Mulai" class="size-6 object-contain" />
               Daftar Gratis Sekarang <ArrowRight class="size-4" />
             </button>
           </RouterLink>
@@ -781,12 +788,8 @@ if (typeof window !== 'undefined') {
           <div class="col-span-2 space-y-3">
             <Logo size="md" />
             <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-sm font-medium">
-              Platform kuis dan evaluasi belajar interaktif dengan timer server-side, skor instan, leaderboard kompetitif, dan koleksi 3D badge prestasi.
+              Platform kuis dan evaluasi belajar interaktif dengan timer server-side, skor instan, dan leaderboard kompetitif.
             </p>
-            <div class="pt-2 flex items-center gap-2 text-xs font-semibold text-muted-foreground">
-              <span class="size-2 rounded-full bg-emerald-500" />
-              <span>Semua Sistem Operasional (Uptime 99.8%)</span>
-            </div>
           </div>
 
           <!-- Col 2: Platform -->
@@ -796,7 +799,7 @@ if (typeof window !== 'undefined') {
               <li><a href="#fitur" class="hover:text-primary transition-colors">Fitur Ujian Online</a></li>
               <li><a href="#fitur" class="hover:text-primary transition-colors">Timer & Auto-Submit</a></li>
               <li><a href="#leaderboard" class="hover:text-primary transition-colors">Papan Peringkat</a></li>
-              <li><a href="#badge" class="hover:text-primary transition-colors">Sistem 3D Badge</a></li>
+              <li><a href="#badge" class="hover:text-primary transition-colors">Lencana Prestasi</a></li>
             </ul>
           </div>
 

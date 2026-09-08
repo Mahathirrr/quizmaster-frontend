@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 
+import logoMark from '@/assets/brand/logo-mark.svg'
+
 withDefaults(
   defineProps<{
     size?: 'sm' | 'md' | 'lg'
@@ -12,18 +14,15 @@ withDefaults(
 
 <template>
   <RouterLink to="/" class="group inline-flex items-center gap-2.5 select-none">
-    <div
+    <img
+      src="/assets/logo.png"
+      alt="QuizMaster"
+      draggable="false"
       :class="[
-        'relative shrink-0 flex items-center justify-center transition-transform duration-200 group-hover:scale-105',
+        'inline-block shrink-0 object-contain drop-shadow-xs transition-transform duration-200 group-hover:scale-105',
         size === 'sm' ? 'size-8' : size === 'lg' ? 'size-11' : 'size-9',
       ]"
-    >
-      <img
-        src="/favicon.svg"
-        alt="QuizMaster Logo"
-        class="size-full object-contain drop-shadow-xs"
-      />
-    </div>
+    />
     <div v-if="showText !== false" class="leading-none">
       <div class="flex items-center gap-1.5">
         <span
@@ -33,7 +32,9 @@ withDefaults(
           ]"
         >Quiz<span class="text-primary">Master</span></span>
       </div>
-      <span v-if="size === 'lg'" class="mt-1 block text-[11px] font-semibold text-muted-foreground">Platform Kuis & Ujian Digital</span>
+      <span v-if="size === 'lg'" class="mt-1 block text-[11px] font-semibold text-muted-foreground">
+        Platform Kuis & Ujian Digital
+      </span>
     </div>
   </RouterLink>
 </template>

@@ -60,6 +60,7 @@ onMounted(load)
       description="Pilih ujian, daftar, terus gas kerjain!"
       icon="rocket"
       tone="coral"
+      imageSrc="/assets/icon-take-exam.png"
     />
 
     <p v-if="error" class="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive">{{ error }}</p>

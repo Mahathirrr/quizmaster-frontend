@@ -36,7 +36,13 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-6">
-    <PageHeader title="Dashboard Admin 📊" description="Ringkasan platform ujian kamu." icon="chart" tone="violet" />
+    <PageHeader
+      title="Dashboard Admin 📊"
+      description="Ringkasan platform ujian kamu."
+      icon="chart"
+      tone="violet"
+      imageSrc="/assets/icon-dashboard.png"
+    />
 
     <p v-if="error" class="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive">{{ error }}</p>
 
