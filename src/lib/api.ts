@@ -68,6 +68,38 @@ export type Category = {
   created_at?: string
 }
 
+export type PublicCatalogExam = {
+  id: number
+  title: string
+  category: string
+  questions: number
+  duration_minutes: number
+  enrolled: number
+  difficulty: string
+  description?: string
+}
+
+export type PublicCatalog = {
+  stats: {
+    students: number
+    exams: number
+    questions: number
+    completions: number
+    avg_score: number
+  }
+  categories: Array<{ id: number; name: string }>
+  exams: PublicCatalogExam[]
+}
+
+export type PublicLeaderboardEntry = {
+  rank: number
+  student_id: number
+  student_name: string
+  avg_score: number
+  completions: number
+  total_xp: number
+}
+
 export type Exam = {
   id: number
   title: string
@@ -99,7 +131,7 @@ export type Student = {
 
 export type ExamEnrollment = {
   exam_id: number
-  status: 'available' | 'enrolled' | 'completed' | 'in_progress'
+  status: 'available' | 'enrolled' | 'completed' | 'in_progress' | 'pending'
   result_id?: number
 }
 
@@ -307,6 +339,18 @@ export const api = {
     return request<{ user: User }>('/auth/me', { token })
   },
 
+  async updateProfile(
+    token: string,
+    body: { name?: string; current_password?: string; new_password?: string },
+  ): Promise<User> {
+    const payload: Record<string, string> = {}
+    if (body.name !== undefined) payload.name = body.name
+    if (body.current_password) payload.current_password = body.current_password
+    if (body.new_password) payload.new_password = body.new_password
+    const data = await request<{ user: User }>('/auth/profile', { method: 'PATCH', body: payload, token })
+    return data.user
+  },
+
   async adminDashboard(token: string): Promise<DashboardStats> {
     const data = await request<{ users: number; exams: number; categories: number; completions: number }>(
       '/dashboard/admin',
@@ -499,7 +543,7 @@ export const api = {
       } else if (enrollStatus === 'approved') {
         out.push({ ...exam, exam_id: item.id, status: 'enrolled' })
       } else if (enrollStatus === 'pending') {
-        out.push({ ...exam, exam_id: item.id, status: 'enrolled' })
+        out.push({ ...exam, exam_id: item.id, status: 'pending' })
       } else {
         out.push({ ...exam, exam_id: item.id, status: 'available' })
       }
@@ -609,6 +653,18 @@ export const api = {
       selected_option: item.selected_option ? optionIndex(item.selected_option) : null,
       correct_answer: optionIndex(item.correct_option),
       is_correct: item.is_correct,
+    }))
+  },
+
+  async publicCatalog(): Promise<PublicCatalog> {
+    return request<PublicCatalog>('/public/catalog')
+  },
+
+  async publicLeaderboard(): Promise<PublicLeaderboardEntry[]> {
+    const data = await request<{ leaderboard: PublicLeaderboardEntry[] }>('/public/leaderboard')
+    return data.leaderboard.map((row) => ({
+      ...row,
+      avg_score: Math.round(row.avg_score),
     }))
   },
 

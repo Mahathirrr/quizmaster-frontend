@@ -215,7 +215,12 @@
   border-radius: 1rem;
   border: 2px solid var(--border);
   background: var(--card);
+  color: var(--foreground);
   transition: all 0.15s ease;
+}
+
+.qm-card-plum .qm-option {
+  color: var(--foreground);
 }
 
 .qm-option:hover {

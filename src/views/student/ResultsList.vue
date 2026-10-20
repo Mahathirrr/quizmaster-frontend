@@ -28,7 +28,7 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-6">
-    <PageHeader title="Hasil Ujian 📋" description="Semua submission dan skor kamu." icon="chart" tone="violet" />
+    <PageHeader title="Hasil Ujian 📋" description="Semua submission dan skor kamu." icon="trophy" tone="violet" />
 
     <p v-if="error" class="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive">{{ error }}</p>
 

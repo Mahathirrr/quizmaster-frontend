@@ -17,9 +17,9 @@ const error = ref('')
 const loading = ref(true)
 
 const quickActions = [
-  { label: 'Buat kategori baru', icon: 'book' as const, tone: 'mint' as const, to: '/admin/categories' },
-  { label: 'Kelola ujian', icon: 'target' as const, tone: 'sun' as const, to: '/admin/exams' },
-  { label: 'Lihat semua hasil', icon: 'trophy' as const, tone: 'coral' as const, to: '/admin/results' },
+  { label: 'Buat kategori baru', icon: 'category' as const, tone: 'mint' as const, to: '/admin/categories' },
+  { label: 'Kelola ujian', icon: 'exam' as const, tone: 'sun' as const, to: '/admin/exams' },
+  { label: 'Lihat semua hasil', icon: 'leaderboard' as const, tone: 'coral' as const, to: '/admin/results' },
 ]
 
 onMounted(async () => {
@@ -36,19 +36,13 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-6">
-    <PageHeader
-      title="Dashboard Admin 📊"
-      description="Ringkasan platform ujian kamu."
-      icon="chart"
-      tone="violet"
-      imageSrc="/assets/icon-dashboard.png"
-    />
+    <PageHeader title="Dashboard Admin 📊" description="Ringkasan platform ujian kamu." icon="dashboard" tone="violet" />
 
     <p v-if="error" class="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive">{{ error }}</p>
 
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <StatCard label="Kategori" :value="stats?.total_categories ?? 0" icon="book" tone="mint" :loading="loading" />
-      <StatCard label="Ujian" :value="stats?.total_exams ?? 0" icon="target" tone="sun" :loading="loading" />
+      <StatCard label="Kategori" :value="stats?.total_categories ?? 0" icon="category" tone="mint" :loading="loading" />
+      <StatCard label="Ujian" :value="stats?.total_exams ?? 0" icon="exam" tone="sun" :loading="loading" />
       <StatCard label="Siswa" :value="stats?.total_students ?? 0" icon="users" tone="sky" :loading="loading" />
       <StatCard label="Hasil" :value="stats?.total_results ?? 0" icon="trophy" tone="coral" :loading="loading" />
     </div>

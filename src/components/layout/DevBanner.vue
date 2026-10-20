@@ -2,11 +2,13 @@
 import { RouterLink } from 'vue-router'
 
 import { DEV_ROLE, DEV_SKIP_AUTH } from '@/lib/dev'
+
+const showDevBanner = DEV_SKIP_AUTH && import.meta.env.VITE_DEV_SHOW_BANNER !== 'false'
 </script>
 
 <template>
   <div
-    v-if="DEV_SKIP_AUTH"
+    v-if="showDevBanner"
     class="sticky top-14 z-30 border-b border-butter/40 bg-butter px-4 py-1.5 text-center text-xs font-bold text-foreground"
   >
     🛠 DEV MODE — login dilewati

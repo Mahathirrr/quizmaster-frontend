@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import { ClipboardList } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 
 import GlassIcon from '@/components/brand/GlassIcon.vue'
 import HexBadge from '@/components/brand/HexBadge.vue'
+import MascotIcon from '@/components/brand/MascotIcon.vue'
 import ProgressBar from '@/components/brand/ProgressBar.vue'
 import StatCard from '@/components/brand/StatCard.vue'
 import { Badge } from '@/components/ui/badge'
@@ -18,13 +20,7 @@ const data = ref<StudentDashboard | null>(null)
 const loading = ref(true)
 const error = ref('')
 const activeCategory = ref('Semua')
-const categoryMeta = [
-  { name: 'Semua', asset: '/assets/icon-dashboard.png' },
-  { name: 'Matematika', asset: '/assets/cat-math.png' },
-  { name: 'IPA', asset: '/assets/cat-science.png' },
-  { name: 'Bahasa', asset: '/assets/cat-language.png' },
-  { name: 'Sejarah', asset: '/assets/cat-history.png' },
-]
+const categories = ref<string[]>(['Semua'])
 
 const xp = computed(() => Math.round((data.value?.average_score ?? 0) * 10))
 const level = computed(() => {
@@ -53,7 +49,14 @@ const tips = [
 onMounted(async () => {
   if (!auth.token) return
   try {
-    data.value = await api.studentDashboard(auth.token)
+    const [dash, catalog] = await Promise.all([
+      api.studentDashboard(auth.token),
+      api.publicCatalog().catch(() => null),
+    ])
+    data.value = dash
+    if (catalog?.categories?.length) {
+      categories.value = ['Semua', ...catalog.categories.map((c) => c.name)]
+    }
   } catch (e) {
     error.value = e instanceof Error ? e.message : 'Gagal memuat dashboard'
   } finally {
@@ -70,7 +73,7 @@ onMounted(async () => {
         <div class="flex items-center gap-4">
           <div class="relative shrink-0">
             <div class="qm-avatar size-16 text-xl font-black shadow-sm">{{ auth.user?.name?.charAt(0) ?? '?' }}</div>
-            <img src="/assets/mascot.png" alt="Mascot" class="absolute -bottom-2 -right-2 size-8 object-contain drop-shadow-xs" />
+            <MascotIcon :size="32" class="absolute -bottom-2 -right-2 drop-shadow-xs" />
           </div>
           <div>
             <div class="flex items-center gap-2">
@@ -83,8 +86,8 @@ onMounted(async () => {
           </div>
         </div>
         <RouterLink to="/student/exams">
-          <button class="qm-btn-fun inline-flex items-center gap-2.5 px-5 py-2.5 text-sm">
-            <img src="/assets/icon-take-exam.png" alt="Quiz" class="size-5.5 object-contain" />
+          <button class="qm-btn-fun inline-flex items-center gap-2 px-5 py-2.5 text-sm">
+            <ClipboardList class="size-4" />
             Mulai Kuis Baru
           </button>
         </RouterLink>
@@ -95,7 +98,7 @@ onMounted(async () => {
     <!-- Streak banner -->
     <div class="qm-card-yellow flex flex-wrap items-center justify-between gap-4 p-5">
       <div class="flex items-center gap-4">
-        <img src="/assets/badge-streak.png" alt="Streak Flame" class="size-16 object-contain drop-shadow-sm" />
+        <GlassIcon name="streak" tone="sun" :size="64" />
         <div>
           <p class="text-xs font-black uppercase tracking-wider opacity-75">Daily Learning Streak</p>
           <p class="text-2xl sm:text-3xl font-black">{{ streak }} Hari Berturut 🔥</p>
@@ -113,25 +116,18 @@ onMounted(async () => {
 
     <!-- Stats -->
     <div class="grid gap-4 sm:grid-cols-3">
-      <StatCard label="Ujian Diikuti" :value="data?.enrolled_exams ?? 0" icon="book" tone="violet" :loading="loading" />
+      <StatCard label="Ujian Diikuti" :value="data?.enrolled_exams ?? 0" icon="exam" tone="violet" :loading="loading" />
       <StatCard label="Selesai" :value="data?.completed_exams ?? 0" icon="target" tone="mint" :loading="loading" />
       <StatCard label="Rata-rata Skor" :value="`${data?.average_score ?? 0}%`" icon="chart" tone="sun" :loading="loading" />
     </div>
 
-    <!-- Category pills with 3D icons -->
+    <!-- Category pills -->
     <div>
-      <h2 class="font-extrabold mb-3">Kategori Ujian 📚</h2>
-      <div class="flex flex-wrap gap-2.5">
-        <button
-          v-for="cat in categoryMeta"
-          :key="cat.name"
-          type="button"
-          :class="['qm-pill inline-flex items-center gap-2', activeCategory === cat.name && 'qm-pill-active']"
-          @click="activeCategory = cat.name"
-        >
-          <img :src="cat.asset" :alt="cat.name" class="size-4.5 object-contain" />
-          {{ cat.name }}
-        </button>
+      <h2 class="font-extrabold mb-3">Kategori Ujian</h2>
+      <div class="flex flex-wrap gap-2">
+        <button v-for="cat in categories" :key="cat" type="button"
+          :class="['qm-pill', activeCategory === cat && 'qm-pill-active']"
+          @click="activeCategory = cat">{{ cat }}</button>
       </div>
     </div>
 

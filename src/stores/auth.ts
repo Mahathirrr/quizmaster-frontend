@@ -8,8 +8,8 @@ import { DEV_MOCK_TOKEN, DEV_MOCK_USER, DEV_SKIP_AUTH } from '@/lib/dev'
 const TOKEN_KEY = 'quizmaster_token'
 
 export const useAuthStore = defineStore('auth', () => {
-  const token = ref<string | null>(DEV_SKIP_AUTH ? null : localStorage.getItem(TOKEN_KEY))
-  const user = ref<User | null>(null)
+  const token = ref<string | null>(DEV_SKIP_AUTH ? DEV_MOCK_TOKEN : localStorage.getItem(TOKEN_KEY))
+  const user = ref<User | null>(DEV_SKIP_AUTH ? { ...DEV_MOCK_USER } : null)
   const loading = ref(false)
   const error = ref('')
 

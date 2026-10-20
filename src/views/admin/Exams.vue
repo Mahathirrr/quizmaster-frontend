@@ -28,7 +28,7 @@ const form = ref({
   category_id: 0,
   duration_minutes: 30,
   pass_score: 70,
-  status: 'draft' as Exam['status'],
+  status: 'published' as Exam['status'],
 })
 
 const categoryMap = computed(() => Object.fromEntries(categories.value.map((c) => [c.id, c.name])))
@@ -63,7 +63,7 @@ function openCreate() {
     category_id: categories.value[0]?.id ?? 0,
     duration_minutes: 30,
     pass_score: 70,
-    status: 'draft',
+    status: 'published',
   }
   dialogOpen.value = true
 }

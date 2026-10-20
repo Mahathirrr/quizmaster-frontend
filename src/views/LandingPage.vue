@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import {
   ArrowRight,
   ChevronRight,
@@ -25,99 +25,116 @@ import Logo from '@/components/brand/Logo.vue'
 import ProgressBar from '@/components/brand/ProgressBar.vue'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { api, type PublicCatalogExam, type PublicLeaderboardEntry } from '@/lib/api'
 
 const activeCategory = ref('Semua')
+const catalogLoading = ref(true)
+const catalogCategories = ref<Array<{ id: number; name: string }>>([])
+const leaderboard = ref<PublicLeaderboardEntry[]>([])
+const leaderboardLoading = ref(true)
 
-const categories = ['Semua', 'Matematika', 'Sains', 'Bahasa', 'Sejarah', 'Teknologi']
+type QuizCard = {
+  id: number
+  title: string
+  cat: string
+  questions: number
+  duration: number
+  enrolled: number
+  difficulty: string
+  asset: string
+}
 
-// Stat cards
-const stats = [
-  {
-    label: 'Siswa aktif terdaftar',
-    value: '1.200+',
-    trend: '+18% bulan ini',
-    asset: '/assets/stat-students.png',
-  },
-  {
-    label: 'Ujian siap dikerjakan',
-    value: '350+',
-    trend: 'Terus bertambah',
-    asset: '/assets/stat-exams.png',
-  },
-  {
-    label: 'Bank soal interaktif',
-    value: '8.000+',
-    trend: '5 Kategori inti',
-    asset: '/assets/badge-brain.png',
-  },
-  {
-    label: 'Rata-rata skor lulus',
-    value: '78%',
-    trend: 'Akurasi terverifikasi',
-    asset: '/assets/stat-score.png',
-  },
-]
+const categoryFilters = ref<string[]>(['Semua'])
+const stats = ref([
+  { label: 'Siswa aktif terdaftar', value: '—', trend: 'Data live', asset: '/assets/stat-students.png' },
+  { label: 'Ujian siap dikerjakan', value: '—', trend: 'Status aktif', asset: '/assets/stat-exams.png' },
+  { label: 'Bank soal interaktif', value: '—', trend: 'Soal terverifikasi', asset: '/assets/badge-brain.png' },
+  { label: 'Rata-rata skor lulus', value: '—', trend: 'Hasil ujian nyata', asset: '/assets/stat-score.png' },
+])
+const quizCards = ref<QuizCard[]>([])
 
-const sampleQuizzes = [
-  {
-    title: 'Matematika Logika & Aljabar',
-    cat: 'Matematika',
-    questions: 20,
-    duration: 30,
-    enrolled: 245,
-    difficulty: 'Sedang',
-    asset: '/assets/cat-math.png',
-  },
-  {
-    title: 'Fisika & Sains Lingkungan',
-    cat: 'Sains',
-    questions: 25,
-    duration: 35,
-    enrolled: 189,
-    difficulty: 'Menantang',
-    asset: '/assets/cat-science.png',
-  },
-  {
-    title: 'Sejarah Kemerdekaan RI',
-    cat: 'Sejarah',
-    questions: 15,
-    duration: 20,
-    enrolled: 142,
-    difficulty: 'Mudah',
-    asset: '/assets/badge-trophy.png',
-  },
-  {
-    title: 'English Grammar & Vocabulary',
-    cat: 'Bahasa',
-    questions: 30,
-    duration: 40,
-    enrolled: 310,
-    difficulty: 'Sedang',
-    asset: '/assets/badge-timer.png',
-  },
-  {
-    title: 'Algoritma & Logika Pemrograman',
-    cat: 'Teknologi',
-    questions: 20,
-    duration: 25,
-    enrolled: 280,
-    difficulty: 'Menantang',
-    asset: '/assets/badge-brain.png',
-  },
-  {
-    title: 'Biologi Sel & Genetika Dasar',
-    cat: 'Sains',
-    questions: 18,
-    duration: 25,
-    enrolled: 120,
-    difficulty: 'Mudah',
-    asset: '/assets/cat-science.png',
-  },
-]
+function categoryAsset(name: string): string {
+  const key = name.toLowerCase()
+  if (key.includes('pemrograman') || key.includes('algoritma')) return '/assets/badge-brain.png'
+  if (key.includes('basis data') || key.includes('database')) return '/assets/badge-target.png'
+  if (key.includes('jaringan')) return '/assets/cat-tech.png'
+  if (key.includes('keamanan') || key.includes('siber')) return '/assets/badge-streak.png'
+  if (key.includes('teknologi') || key.includes('pengetahuan')) return '/assets/cat-tech.png'
+  return '/assets/badge-trophy.png'
+}
+
+function mapExam(exam: PublicCatalogExam): QuizCard {
+  return {
+    id: exam.id,
+    title: exam.title,
+    cat: exam.category || 'Umum',
+    questions: exam.questions,
+    duration: exam.duration_minutes,
+    enrolled: exam.enrolled,
+    difficulty: exam.difficulty,
+    asset: categoryAsset(exam.category),
+  }
+}
+
+function initials(name: string) {
+  const parts = name.trim().split(/\s+/).filter(Boolean)
+  if (parts.length >= 2) {
+    return (parts[0]![0]! + parts[parts.length - 1]![0]!).toUpperCase()
+  }
+  return (parts[0]?.slice(0, 2) ?? '?').toUpperCase()
+}
+
+function scrollToCategory(name: string) {
+  activeCategory.value = name
+  document.getElementById('kuis')?.scrollIntoView({ behavior: 'smooth' })
+}
+
+onMounted(async () => {
+  leaderboardLoading.value = true
+  try {
+    const [data, lb] = await Promise.all([api.publicCatalog(), api.publicLeaderboard()])
+    catalogCategories.value = data.categories
+    categoryFilters.value = ['Semua', ...data.categories.map((c) => c.name)]
+    quizCards.value = data.exams.map(mapExam)
+    leaderboard.value = lb
+    stats.value = [
+      {
+        label: 'Siswa aktif terdaftar',
+        value: String(data.stats.students),
+        trend: 'Mahasiswa USK & pengguna',
+        asset: '/assets/stat-students.png',
+      },
+      {
+        label: 'Ujian siap dikerjakan',
+        value: String(data.stats.exams),
+        trend: 'Ujian status aktif',
+        asset: '/assets/stat-exams.png',
+      },
+      {
+        label: 'Bank soal interaktif',
+        value: String(data.stats.questions),
+        trend: `${data.categories.length} kategori`,
+        asset: '/assets/badge-brain.png',
+      },
+      {
+        label: 'Rata-rata skor lulus',
+        value: `${data.stats.avg_score}%`,
+        trend: `${data.stats.completions} penyelesaian`,
+        asset: '/assets/stat-score.png',
+      },
+    ]
+  } catch {
+    quizCards.value = []
+    leaderboard.value = []
+  } finally {
+    catalogLoading.value = false
+    leaderboardLoading.value = false
+  }
+})
 
 const filteredQuizzes = computed(() => {
-  if (activeCategory.value === 'Semua') return sampleQuizzes
-  return sampleQuizzes.filter((q) => q.cat === activeCategory.value)
+  if (activeCategory.value === 'Semua') return quizCards.value
+  return quizCards.value.filter((q) => q.cat === activeCategory.value)
 })
 
 const features = [
@@ -295,8 +312,7 @@ if (typeof window !== 'undefined') {
           <!-- CTAs -->
           <div class="mt-8 flex flex-wrap items-center gap-4">
             <RouterLink to="/register">
-              <button class="qm-btn-fun inline-flex items-center gap-2.5 px-6 py-3.5 text-base">
-                <img src="/assets/icon-take-exam.png" alt="Mulai Ujian" class="size-6 object-contain" />
+              <button class="qm-btn-fun inline-flex items-center gap-2 px-6 py-3.5 text-base">
                 Mulai Ujian Gratis <ArrowRight class="size-4" />
               </button>
             </RouterLink>
@@ -473,7 +489,7 @@ if (typeof window !== 'undefined') {
           <!-- Category Filter Pills -->
           <div class="flex flex-wrap gap-2">
             <button
-              v-for="cat in categories"
+              v-for="cat in categoryFilters"
               :key="cat"
               type="button"
               :class="['qm-pill', activeCategory === cat && 'qm-pill-active']"
@@ -484,11 +500,16 @@ if (typeof window !== 'undefined') {
           </div>
         </div>
 
+        <p v-if="catalogLoading" class="text-sm text-muted-foreground">Memuat ujian dari server…</p>
+        <p v-else-if="filteredQuizzes.length === 0" class="text-sm text-muted-foreground">
+          Belum ada ujian aktif untuk kategori ini.
+        </p>
+
         <!-- Quizzes Grid -->
-        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div v-else class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <div
             v-for="quiz in filteredQuizzes"
-            :key="quiz.title"
+            :key="quiz.id"
             class="qm-card group relative flex flex-col justify-between p-5 overflow-hidden"
           >
             <div>
@@ -616,11 +637,6 @@ if (typeof window !== 'undefined') {
     <section id="leaderboard" class="px-4 py-16 sm:px-6 md:py-24">
       <div class="mx-auto max-w-5xl">
         <div class="text-center max-w-2xl mx-auto mb-12">
-          <img
-            src="/assets/logo-leaderboard.png"
-            alt="3D Leaderboard Trophy"
-            class="mx-auto size-24 sm:size-28 object-contain drop-shadow-md mb-3"
-          />
           <div class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-extrabold text-primary mb-3">
             <Flame class="size-3.5 text-amber-500 fill-amber-500" /> Papan Peringkat
           </div>
@@ -632,89 +648,87 @@ if (typeof window !== 'undefined') {
           </p>
         </div>
 
-        <!-- 3-Podium Visualization -->
-        <div class="mb-10 grid grid-cols-3 items-end gap-3 sm:gap-6 pt-10">
-          <!-- Rank 2 (Silver) -->
-          <div class="flex flex-col items-center">
-            <div class="relative mb-2">
-              <div class="qm-avatar size-14 sm:size-16 text-sm font-black border-slate-300 bg-slate-100 text-slate-700">
-                BS
+        <p v-if="leaderboardLoading" class="py-16 text-center text-sm font-semibold text-muted-foreground">Memuat papan peringkat…</p>
+
+        <p v-else-if="!leaderboard.length" class="qm-card py-12 text-center text-sm text-muted-foreground">
+          Belum ada peringkat — selesaikan ujian dan jadilah juara pertama di podium!
+        </p>
+
+        <template v-else>
+          <!-- 3-Podium Visualization (data live) -->
+          <div class="mb-10 grid grid-cols-3 items-end gap-3 sm:gap-6 pt-10">
+            <!-- Rank 2 -->
+            <div v-if="leaderboard[1]" class="flex flex-col items-center">
+              <div class="relative mb-2">
+                <div class="qm-avatar size-14 sm:size-16 text-sm font-black border-slate-300 bg-slate-100 text-slate-700">
+                  {{ initials(leaderboard[1].student_name) }}
+                </div>
+                <span class="absolute -bottom-1 -right-1 flex size-6 items-center justify-center rounded-full bg-slate-300 text-xs font-black text-slate-800 shadow-xs">2</span>
               </div>
-              <span class="absolute -bottom-1 -right-1 flex size-6 items-center justify-center rounded-full bg-slate-300 text-xs font-black text-slate-800 shadow-xs">
-                2
-              </span>
+              <p class="font-extrabold text-xs sm:text-sm text-center truncate w-full px-1">{{ leaderboard[1].student_name }}</p>
+              <p class="text-[11px] font-bold text-muted-foreground">{{ leaderboard[1].total_xp.toLocaleString('id-ID') }} XP</p>
+              <div class="mt-3 w-full rounded-t-2xl border border-slate-300/80 bg-slate-100 dark:bg-slate-800/80 p-3 sm:p-4 text-center h-28 sm:h-32 flex flex-col justify-center items-center shadow-xs">
+                <span class="text-2xl sm:text-3xl">🥈</span>
+                <span class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mt-1">{{ leaderboard[1].avg_score }}% rata-rata</span>
+              </div>
             </div>
-            <p class="font-extrabold text-xs sm:text-sm text-center truncate w-full">Budi Santoso</p>
-            <p class="text-[11px] font-bold text-muted-foreground">1.180 XP</p>
-            <div class="mt-3 w-full rounded-t-2xl border border-slate-300/80 bg-slate-100 dark:bg-slate-800/80 p-3 sm:p-4 text-center h-28 sm:h-32 flex flex-col justify-center items-center shadow-xs">
-              <span class="text-2xl sm:text-3xl">🥈</span>
-              <span class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mt-1">95% Skor</span>
+            <div v-else class="hidden sm:block" aria-hidden="true" />
+
+            <!-- Rank 1 -->
+            <div v-if="leaderboard[0]" class="flex flex-col items-center -translate-y-4">
+              <div class="relative mb-2">
+                <div class="qm-avatar size-18 sm:size-20 text-base font-black border-amber-400 bg-amber-100 text-amber-800 shadow-md">
+                  {{ initials(leaderboard[0].student_name) }}
+                </div>
+                <span class="absolute -bottom-1 -right-1 flex size-7 items-center justify-center rounded-full bg-amber-400 text-sm font-black text-slate-950 shadow-md">👑</span>
+              </div>
+              <p class="font-extrabold text-sm sm:text-base text-center truncate w-full px-1 text-primary">{{ leaderboard[0].student_name }}</p>
+              <p class="text-xs font-black text-amber-600 dark:text-amber-400">{{ leaderboard[0].total_xp.toLocaleString('id-ID') }} XP</p>
+              <div class="mt-3 w-full rounded-t-2xl border-2 border-amber-400 bg-gradient-to-b from-amber-200/50 to-amber-100/30 dark:from-amber-950/60 dark:to-amber-900/30 p-4 text-center h-36 sm:h-40 flex flex-col justify-center items-center shadow-md">
+                <span class="text-3xl sm:text-4xl">🥇</span>
+                <span class="text-xs sm:text-sm font-black text-amber-800 dark:text-amber-200 mt-1">{{ leaderboard[0].avg_score }}% rata-rata</span>
+              </div>
             </div>
+
+            <!-- Rank 3 -->
+            <div v-if="leaderboard[2]" class="flex flex-col items-center">
+              <div class="relative mb-2">
+                <div class="qm-avatar size-14 sm:size-16 text-sm font-black border-amber-700 bg-amber-50 text-amber-900">
+                  {{ initials(leaderboard[2].student_name) }}
+                </div>
+                <span class="absolute -bottom-1 -right-1 flex size-6 items-center justify-center rounded-full bg-amber-700 text-xs font-black text-white shadow-xs">3</span>
+              </div>
+              <p class="font-extrabold text-xs sm:text-sm text-center truncate w-full px-1">{{ leaderboard[2].student_name }}</p>
+              <p class="text-[11px] font-bold text-muted-foreground">{{ leaderboard[2].total_xp.toLocaleString('id-ID') }} XP</p>
+              <div class="mt-3 w-full rounded-t-2xl border border-amber-700/40 bg-amber-50 dark:bg-amber-950/40 p-3 sm:p-4 text-center h-24 sm:h-28 flex flex-col justify-center items-center shadow-xs">
+                <span class="text-2xl sm:text-3xl">🥉</span>
+                <span class="text-xs font-extrabold text-amber-800 dark:text-amber-300 mt-1">{{ leaderboard[2].avg_score }}% rata-rata</span>
+              </div>
+            </div>
+            <div v-else class="hidden sm:block" aria-hidden="true" />
           </div>
 
-          <!-- Rank 1 (Gold - Taller & Highlighted) -->
-          <div class="flex flex-col items-center -translate-y-4">
-            <div class="relative mb-2">
-              <div class="qm-avatar size-18 sm:size-20 text-base font-black border-amber-400 bg-amber-100 text-amber-800 shadow-md">
-                AR
+          <!-- Rank 4-5 -->
+          <div v-if="leaderboard.length > 3" class="qm-card divide-y divide-border/80 overflow-hidden">
+            <div
+              v-for="row in leaderboard.slice(3, 5)"
+              :key="row.student_id"
+              class="flex items-center justify-between p-4 px-6 hover:bg-secondary/40 transition-colors"
+            >
+              <div class="flex items-center gap-3 min-w-0">
+                <span class="font-black text-muted-foreground text-sm w-6">#{{ row.rank }}</span>
+                <div class="qm-avatar size-9 text-xs font-bold shrink-0">{{ initials(row.student_name) }}</div>
+                <div class="min-w-0">
+                  <p class="font-extrabold text-sm truncate">{{ row.student_name }}</p>
+                  <p class="text-xs text-muted-foreground font-semibold">
+                    {{ row.total_xp.toLocaleString('id-ID') }} XP · {{ row.completions }} ujian selesai
+                  </p>
+                </div>
               </div>
-              <span class="absolute -bottom-1 -right-1 flex size-7 items-center justify-center rounded-full bg-amber-400 text-sm font-black text-slate-950 shadow-md">
-                👑
-              </span>
-            </div>
-            <p class="font-extrabold text-sm sm:text-base text-center truncate w-full text-primary">Aisha Rahma</p>
-            <p class="text-xs font-black text-amber-600 dark:text-amber-400">1.240 XP</p>
-            <div class="mt-3 w-full rounded-t-2xl border-2 border-amber-400 bg-gradient-to-b from-amber-200/50 to-amber-100/30 dark:from-amber-950/60 dark:to-amber-900/30 p-4 text-center h-36 sm:h-40 flex flex-col justify-center items-center shadow-md">
-              <span class="text-3xl sm:text-4xl">🥇</span>
-              <span class="text-xs sm:text-sm font-black text-amber-800 dark:text-amber-200 mt-1">98% Skor Rata-rata</span>
+              <span class="font-black text-primary text-sm shrink-0">{{ row.avg_score }}%</span>
             </div>
           </div>
-
-          <!-- Rank 3 (Bronze) -->
-          <div class="flex flex-col items-center">
-            <div class="relative mb-2">
-              <div class="qm-avatar size-14 sm:size-16 text-sm font-black border-amber-700 bg-amber-50 text-amber-900">
-                CM
-              </div>
-              <span class="absolute -bottom-1 -right-1 flex size-6 items-center justify-center rounded-full bg-amber-700 text-xs font-black text-white shadow-xs">
-                3
-              </span>
-            </div>
-            <p class="font-extrabold text-xs sm:text-sm text-center truncate w-full">Citra Melati</p>
-            <p class="text-[11px] font-bold text-muted-foreground">1.050 XP</p>
-            <div class="mt-3 w-full rounded-t-2xl border border-amber-700/40 bg-amber-50 dark:bg-amber-950/40 p-3 sm:p-4 text-center h-24 sm:h-28 flex flex-col justify-center items-center shadow-xs">
-              <span class="text-2xl sm:text-3xl">🥉</span>
-              <span class="text-xs font-extrabold text-amber-800 dark:text-amber-300 mt-1">92% Skor</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Rank 4-5 Rows -->
-        <div class="qm-card divide-y divide-border/80 overflow-hidden">
-          <div class="flex items-center justify-between p-4 px-6 hover:bg-secondary/40 transition-colors">
-            <div class="flex items-center gap-3">
-              <span class="font-black text-muted-foreground text-sm w-6">#4</span>
-              <div class="qm-avatar size-9 text-xs font-bold">DK</div>
-              <div>
-                <p class="font-extrabold text-sm">Doni Kusuma</p>
-                <p class="text-xs text-muted-foreground font-semibold">980 XP · 4 Ujian Selesai</p>
-              </div>
-            </div>
-            <span class="font-black text-primary text-sm">89%</span>
-          </div>
-
-          <div class="flex items-center justify-between p-4 px-6 hover:bg-secondary/40 transition-colors">
-            <div class="flex items-center gap-3">
-              <span class="font-black text-muted-foreground text-sm w-6">#5</span>
-              <div class="qm-avatar size-9 text-xs font-bold">EP</div>
-              <div>
-                <p class="font-extrabold text-sm">Eva Permata</p>
-                <p class="text-xs text-muted-foreground font-semibold">920 XP · 3 Ujian Selesai</p>
-              </div>
-            </div>
-            <span class="font-black text-primary text-sm">87%</span>
-          </div>
-        </div>
+        </template>
       </div>
     </section>
 
@@ -766,8 +780,7 @@ if (typeof window !== 'undefined') {
 
         <div class="mt-8 flex flex-wrap justify-center gap-4">
           <RouterLink to="/register">
-            <button class="qm-btn-fun inline-flex items-center gap-2.5 px-8 py-3.5 text-base">
-              <img src="/assets/icon-take-exam.png" alt="Mulai" class="size-6 object-contain" />
+            <button class="qm-btn-fun inline-flex items-center gap-2 px-8 py-3.5 text-base">
               Daftar Gratis Sekarang <ArrowRight class="size-4" />
             </button>
           </RouterLink>
@@ -803,14 +816,17 @@ if (typeof window !== 'undefined') {
             </ul>
           </div>
 
-          <!-- Col 3: Kategori Kuis -->
+          <!-- Col 3: Kategori Kuis (dari API) -->
           <div class="space-y-3 text-xs sm:text-sm">
             <p class="font-black text-foreground uppercase tracking-wider text-[11px]">Kategori Soal</p>
             <ul class="space-y-2 text-muted-foreground font-semibold">
-              <li><a href="#kuis" class="hover:text-primary transition-colors">Matematika & Aljabar</a></li>
-              <li><a href="#kuis" class="hover:text-primary transition-colors">Sains & Fisika</a></li>
-              <li><a href="#kuis" class="hover:text-primary transition-colors">Bahasa & Literasi</a></li>
-              <li><a href="#kuis" class="hover:text-primary transition-colors">Teknologi & Koding</a></li>
+              <li v-for="cat in catalogCategories" :key="cat.id">
+                <button type="button" class="hover:text-primary transition-colors text-left" @click="scrollToCategory(cat.name)">
+                  {{ cat.name }}
+                </button>
+              </li>
+              <li v-if="!catalogLoading && !catalogCategories.length" class="text-muted-foreground/80">Belum ada kategori</li>
+              <li v-else-if="catalogLoading" class="text-muted-foreground/80">Memuat…</li>
             </ul>
           </div>
 
@@ -820,7 +836,6 @@ if (typeof window !== 'undefined') {
             <ul class="space-y-2 text-muted-foreground font-semibold">
               <li><RouterLink to="/login" class="hover:text-primary transition-colors">Masuk Portal Guru</RouterLink></li>
               <li><RouterLink to="/login" class="hover:text-primary transition-colors">Masuk Portal Siswa</RouterLink></li>
-              <li><RouterLink to="/login" class="hover:text-primary transition-colors">Coba Akun Demo</RouterLink></li>
               <li><RouterLink to="/register" class="hover:text-primary transition-colors">Registrasi Akun Baru</RouterLink></li>
             </ul>
           </div>

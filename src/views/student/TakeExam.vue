@@ -5,7 +5,6 @@ import { useRoute, useRouter } from 'vue-router'
 import GlassIcon from '@/components/brand/GlassIcon.vue'
 import ProgressBar from '@/components/brand/ProgressBar.vue'
 import { Button } from '@/components/ui/button'
-import { api, type ExamSession, type SubmitAnswer } from '@/lib/api'
 import { formatDuration } from '@/lib/utils'
 import { useAuthStore } from '@/stores/auth'
 
@@ -94,6 +93,12 @@ onUnmounted(stopTimer)
 <template>
   <div class="mx-auto max-w-2xl">
     <div v-if="loading" class="text-center py-20 text-muted-foreground">Memuat ujian…</div>
+
+    <div v-else-if="!session" class="qm-card mx-auto max-w-md p-6 text-center">
+      <p class="font-bold">Tidak bisa memuat ujian</p>
+      <p class="mt-2 text-sm text-muted-foreground">{{ error || 'Periksa pendaftaran ujian atau coba lagi.' }}</p>
+      <Button variant="fun" class="mt-4 rounded-xl" @click="router.push('/student/exams')">Kembali ke daftar</Button>
+    </div>
 
     <template v-else-if="session">
       <!-- Purple quiz panel like reference -->

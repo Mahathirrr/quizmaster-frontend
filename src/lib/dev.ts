@@ -9,7 +9,7 @@ export const DEV_ROLE = (import.meta.env.VITE_DEV_ROLE || 'admin') as UserRole
 export const DEV_MOCK_USER = {
   id: 1,
   name: DEV_ROLE === 'admin' ? 'Dev Admin' : 'Dev Siswa',
-  email: DEV_ROLE === 'admin' ? 'admin@quizmaster.com' : 'student@quizmaster.com',
+  email: DEV_ROLE === 'admin' ? 'muhammad.mahathir.id@gmail.com' : 'ahmad.rizki@student.usk.ac.id',
   role: DEV_ROLE,
 } as const
 

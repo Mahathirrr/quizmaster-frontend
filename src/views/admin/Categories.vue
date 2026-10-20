@@ -71,7 +71,7 @@ onMounted(load)
 
 <template>
   <div class="space-y-6">
-    <PageHeader title="Kategori 📚" description="Kelompokkan ujian biar rapi." icon="book" tone="mint">
+    <PageHeader title="Kategori 📚" description="Kelompokkan ujian biar rapi." icon="category" tone="mint">
       <template #actions>
         <Button variant="fun" class="rounded-xl" @click="openCreate">
           <Plus class="size-4" />

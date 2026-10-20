@@ -2,7 +2,11 @@
 import { computed } from 'vue'
 import {
   BookOpen,
+  ClipboardList,
+  FolderOpen,
+  LayoutDashboard,
   LineChart,
+  Medal,
   Rocket,
   ShieldCheck,
   Sparkles,
@@ -22,6 +26,10 @@ export type GlassIconName =
   | 'shield'
   | 'target'
   | 'streak'
+  | 'category'
+  | 'exam'
+  | 'leaderboard'
+  | 'dashboard'
 
 export type GlassTone = 'violet' | 'coral' | 'mint' | 'sun' | 'pink' | 'sky'
 
@@ -88,5 +96,9 @@ const toneStyle = computed(() => fallbackTones[props.tone])
     <BookOpen v-else-if="name === 'book'" :size="size * 0.52" />
     <Sparkles v-else-if="name === 'sparkles'" :size="size * 0.52" />
     <ShieldCheck v-else-if="name === 'shield'" :size="size * 0.52" />
+    <FolderOpen v-else-if="name === 'category'" :size="size * 0.52" />
+    <ClipboardList v-else-if="name === 'exam'" :size="size * 0.52" />
+    <Medal v-else-if="name === 'leaderboard'" :size="size * 0.52" />
+    <LayoutDashboard v-else-if="name === 'dashboard'" :size="size * 0.52" />
   </div>
 </template>
