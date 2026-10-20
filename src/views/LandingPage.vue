@@ -646,6 +646,9 @@ if (typeof window !== 'undefined') {
           <p class="mt-3 text-muted-foreground text-sm sm:text-base leading-relaxed">
             Kuis bukan cuma nilai, tapi ajang adu kecerdasan dan ketangkasan bersama teman-temanmu se-Indonesia!
           </p>
+          <p class="mt-2 text-xs font-semibold text-muted-foreground">
+            Peringkat berdasarkan rata-rata skor ujian · XP = rata-rata skor × 10 (sama seperti dashboard siswa)
+          </p>
         </div>
 
         <p v-if="leaderboardLoading" class="py-16 text-center text-sm font-semibold text-muted-foreground">Memuat papan peringkat…</p>
